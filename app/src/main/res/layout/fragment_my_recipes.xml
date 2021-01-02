@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:theme="@style/BlackTextColor"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".presentation.ui.my_recipes.MyRecipesFragment">
+
+
+    <ImageView
+        android:id="@+id/user_profile_picture"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:fontFamily="@font/cabin_bold"
+        android:text="Tom and Jerry"
+        android:textSize="@dimen/_20ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_profile_picture" />
+
+    <Button
+        android:id="@+id/search_for_recipes_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_14sdp"
+        android:layout_marginLeft="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_14sdp"
+        android:layout_marginRight="@dimen/_14sdp"
+        android:background="@drawable/search_btn_background"
+        android:drawableStart="@drawable/ic_search"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawableTint="@color/light_black"
+        android:fontFamily="@font/cabin"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingLeft="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:text="Search for recipes"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_name"
+        tools:targetApi="m" />
+
+    <TextView
+        android:id="@+id/recently_viewed_plain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Recently viewed"
+        android:textSize="@dimen/_16ssp"
+        app:layout_constraintStart_toStartOf="@+id/search_for_recipes_btn"
+        app:layout_constraintTop_toBottomOf="@+id/search_for_recipes_btn" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recently_viewed_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recently_viewed_plain"
+        app:layout_constraintTop_toBottomOf="@+id/recently_viewed_plain" />
+
+    <TextView
+        android:id="@+id/likes_plain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Likes"
+        android:textSize="@dimen/_16ssp"
+        app:layout_constraintStart_toStartOf="@+id/recently_viewed_recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/recently_viewed_recycler_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/likes_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/likes_plain"
+        app:layout_constraintTop_toBottomOf="@+id/likes_plain" />
+</androidx.constraintlayout.widget.ConstraintLayout>

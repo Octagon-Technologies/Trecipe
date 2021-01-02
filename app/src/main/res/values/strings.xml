@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Foodie</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="search_for_recipes_plain_text">Search for recipes</string>
+
+    <string name="ad_attribution">Ad</string>
+
+</resources>

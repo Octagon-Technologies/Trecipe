@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_discover">
+
+    <fragment
+        android:id="@+id/navigation_discover"
+        android:name="com.octagon_technologies.foodie.presentation.ui.discover.DiscoverFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_discover" >
+        <action
+            android:id="@+id/action_navigation_discover_to_recipeFragment"
+            app:destination="@id/navigation_recipe_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_my_recipes"
+        android:name="com.octagon_technologies.foodie.presentation.ui.my_recipes.MyRecipesFragment"
+        android:label="My Recipes"
+        tools:layout="@layout/fragment_my_recipes" >
+        <action
+            android:id="@+id/action_navigation_my_recipes_to_recipeFragment"
+            app:destination="@id/navigation_recipe_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_recipe_fragment"
+        android:name="com.octagon_technologies.foodie.presentation.ui.recipe.RecipeFragment"
+        android:label="fragment_recipe"
+        tools:layout="@layout/fragment_recipe" >
+        <argument
+            android:name="selectedRecipe"
+            app:argType="com.octagon_technologies.foodie.repo.network.models.selected_recipe.SelectedRecipe" />
+    </fragment>
+
+</navigation>

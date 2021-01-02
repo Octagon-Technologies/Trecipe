@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "239321626449",
+    "project_id": "foodie--recipe-app",
+    "storage_bucket": "foodie--recipe-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239321626449:android:c774c08bbe35d94eb50570",
+        "android_client_info": {
+          "package_name": "com.octagon_technologies.foodie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239321626449-isni0iq3a6r27omqtp2g9faumkfalj64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.octagon_technologies.foodie",
+            "certificate_hash": "890a517b854f320349a6335961c23c28d6b68aa8"
+          }
+        },
+        {
+          "client_id": "239321626449-hf9q3393vppp1gvglq19hfncqbc18h83.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe_2eqyGf25-tWxdGdCRohTd3lcUC_0KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239321626449-hf9q3393vppp1gvglq19hfncqbc18h83.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
