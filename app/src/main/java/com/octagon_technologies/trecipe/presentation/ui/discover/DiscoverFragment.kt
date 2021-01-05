@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentDiscoverBinding
 import com.octagon_technologies.trecipe.models.State
+import com.octagon_technologies.trecipe.presentation.ui.discover.ad_discover_item.AdDiscoverItem
 import com.octagon_technologies.trecipe.presentation.ui.discover.each_discover_item.EachDiscoverItemGroup
 import com.octagon_technologies.trecipe.repo.network.models.random_recipes.RandomRecipe
 import com.octagon_technologies.trecipe.utils.BottomNavUtils
 import com.octagon_technologies.trecipe.utils.SelectedRecipeUtils
+import com.octagon_technologies.trecipe.utils.adHelpers
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +34,7 @@ class DiscoverFragment : Fragment() {
 
     private val viewModel: DiscoverViewModel by viewModels()
 
-    //    private val adHelper by adHelpers()
+    private val adHelper by adHelpers()
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
     private lateinit var binding: FragmentDiscoverBinding
 
@@ -65,8 +67,10 @@ class DiscoverFragment : Fragment() {
 
         selectedRecipeUtils.selectedRecipe.observe(viewLifecycleOwner) {
             findNavController().navigate(
-                DiscoverFragmentDirections.actionNavigationDiscoverToRecipeFragment(it
-                    ?: return@observe)
+                DiscoverFragmentDirections.actionNavigationDiscoverToRecipeFragment(
+                    it
+                        ?: return@observe
+                )
             )
             selectedRecipeUtils.resetSelectedRecipe()
 
@@ -111,20 +115,20 @@ class DiscoverFragment : Fragment() {
             }
 
             groupAdapter.add(eachDiscoverItemGroup)
-//            addAdAfter8Recipes(recipesInRecyclerView.indexOf(it))
+            addAdAfter8Recipes(recipesInRecyclerView.indexOf(it))
         }
     }
 
-//    private fun addAdAfter8Recipes(recipeIndex: Int) {
-//        // Adds an ad after every 8 recipes, ensuring that the
-//        // first recipe doesn't have an ad below it
-//        if (recipeIndex.coerceAtLeast(1) % 8 == 0) {
-//            val discoverAd = AdDiscoverItem(adHelper) { failurePosition ->
-//                groupAdapter.removeGroupAtAdapterPosition(failurePosition)
-//            }
-//            groupAdapter.add(discoverAd)
-//        }
-//    }
+    private fun addAdAfter8Recipes(recipeIndex: Int) {
+        // Adds an ad after every 8 recipes, ensuring that the
+        // first recipe doesn't have an ad below it
+        if (recipeIndex.coerceAtLeast(1) % 8 == 0) {
+            val discoverAd = AdDiscoverItem(adHelper) { failurePosition ->
+                groupAdapter.removeGroupAtAdapterPosition(failurePosition)
+            }
+            groupAdapter.add(discoverAd)
+        }
+    }
 
     private fun setUpClickListeners() {
         binding.searchForRecipesBtn.setOnClickListener {
