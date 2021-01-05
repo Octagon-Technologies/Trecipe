@@ -1,0 +1,67 @@
+{
+  "results": [
+    {
+      "id": 634698,
+      "title": "Beef Tataki",
+      "image": "https://spoonacular.com/recipeImages/634698-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 75081,
+      "title": "Beef Wellington",
+      "image": "https://spoonacular.com/recipeImages/75081-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 769754,
+      "title": "Beef Carrot Stew",
+      "image": "https://spoonacular.com/recipeImages/769754-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 634593,
+      "title": "Beef Bourguignon",
+      "image": "https://spoonacular.com/recipeImages/634593-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 634605,
+      "title": "Beef Cottage Pie",
+      "image": "https://spoonacular.com/recipeImages/634605-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 634629,
+      "title": "Beef Lo Mein Noodles",
+      "image": "https://spoonacular.com/recipeImages/634629-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 715567,
+      "title": "Beef Fajita Marinade",
+      "image": "https://spoonacular.com/recipeImages/715567-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 634559,
+      "title": "Beef & Guinness stew",
+      "image": "https://spoonacular.com/recipeImages/634559-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 634671,
+      "title": "Beef Shanks Oso Bucco",
+      "image": "https://spoonacular.com/recipeImages/634671-312x231.jpg",
+      "imageType": "jpg"
+    },
+    {
+      "id": 634618,
+      "title": "Beef Green Chile Stew",
+      "image": "https://spoonacular.com/recipeImages/634618-312x231.jpg",
+      "imageType": "jpg"
+    }
+  ],
+  "offset": 0,
+  "number": 10,
+  "totalResults": 109
+}

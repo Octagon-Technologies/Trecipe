@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:239321626449:android:c774c08bbe35d94eb50570",
+        "mobilesdk_app_id": "1:239321626449:android:fa935b2b977b57ffb50570",
         "android_client_info": {
-          "package_name": "com.octagon_technologies.foodie"
+          "package_name": "com.octagon_technologies.trecipe"
         }
       },
       "oauth_client": [
         {
-          "client_id": "239321626449-isni0iq3a6r27omqtp2g9faumkfalj64.apps.googleusercontent.com",
+          "client_id": "239321626449-aga300af6dpt7c93vvs8f7br36obsbdd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.octagon_technologies.foodie",
+            "package_name": "com.octagon_technologies.trecipe",
             "certificate_hash": "890a517b854f320349a6335961c23c28d6b68aa8"
           }
         },

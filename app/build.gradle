@@ -19,14 +19,14 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.octagon_technologies.foodie"
+        applicationId "com.octagon_technologies.trecipe"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode ((major_release * 100) + (default_release * 10) + minor_release)
+        versionCode((major_release * 100) + (default_release * 10) + minor_release)
         versionName "$major_release.$default_release.$minor_release"
 
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
+//        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,11 +37,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-//        debug {
-//            minifyEnabled true
-//            shrinkResources true
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
 
     buildFeatures {
@@ -69,25 +69,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.3.0-beta01'
 
-    // Coordinator Layout
-    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
-
-    // Dexter
-    implementation "com.karumi:dexter:6.2.2"
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-
-    // Test dependencies
-    testImplementation 'junit:junit:4.13.1'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation "androidx.test:core-ktx:1.3.0"
-    testImplementation "org.robolectric:robolectric:4.4"
-    testImplementation "androidx.test.ext:junit-ktx:1.1.2"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-
-    // Android Test dependencies
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
     // Room and Lifecycle dependencies
     implementation "androidx.room:room-runtime:2.2.6"
     implementation "androidx.room:room-ktx:2.2.6"
@@ -96,10 +77,11 @@ dependencies {
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
     // Moshi
     implementation "com.squareup.moshi:moshi:1.11.0"
-    implementation "com.squareup.moshi:moshi-kotlin:1.11.0"
+//    implementation "com.squareup.moshi:moshi-kotlin:1.11.0"
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
 
     // Retrofit
@@ -123,9 +105,6 @@ dependencies {
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-    // WorkManager
-    implementation "android.arch.work:work-runtime-ktx:1.0.1"
-
     // Sdp
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
@@ -133,8 +112,10 @@ dependencies {
     // Okhttp Logging Interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
-    // SwipeToRefresh
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    // TODO: Add Swipe to refresh layout
+    // SwipeToRefresh with Coordinator layout
+//    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    //    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:2.28-alpha"
@@ -148,13 +129,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:18.0.0'
     implementation 'com.google.firebase:firebase-perf-ktx:19.0.11'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:17.3.0'
-    implementation 'com.google.firebase:firebase-auth-ktx:20.0.1'
-
-    // Facebook
-    implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
 
     // Google
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
 }
 
