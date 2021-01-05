@@ -54,8 +54,8 @@ class LocalRecipeRepo @Inject constructor(recipeDatabase: RecipeDatabase) {
     }
     suspend fun getAllDownloadRecipes() =
         downloadRecipeDao.getAllDownloadRecipes().map { it.selectedRecipe }
-    suspend fun getLocalDownloadRecipe(recipeId: Int) =
-        downloadRecipeDao.getLocalSelectedRecipe(recipeId)
+    suspend fun getLocalDownloadRecipeInstructions(recipeId: Int) =
+        downloadRecipeDao.getLocalSelectedRecipe(recipeId)?.recipeInstructions
 
 
 

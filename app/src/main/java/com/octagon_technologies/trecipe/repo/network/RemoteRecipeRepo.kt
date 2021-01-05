@@ -72,7 +72,7 @@ class RemoteRecipeRepo @Inject constructor(
             val recipeInstructions = retrofitApiService.getRecipeInstructions(recipeId)
             emit(recipeInstructions)
         }.catch { e ->
-            localRecipeRepo.getLocalDownloadRecipe(recipeId)?.also {
+            localRecipeRepo.getLocalDownloadRecipeInstructions(recipeId)?.also {
                 emit(it)
             } ?: run {
                 catchNoNetworkError(e, _state)

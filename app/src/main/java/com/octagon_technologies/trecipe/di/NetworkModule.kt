@@ -27,9 +27,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesMoshi(): Moshi = Moshi.Builder()
-//            .add(KotlinJsonAdapterFactory())
-            .build()
+    fun providesMoshi(): Moshi = Moshi.Builder().build()
 
     @Provides
     @Singleton
@@ -47,7 +45,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRemoteRecipeRepo(retrofit: Retrofit, localRecipeRepo: LocalRecipeRepo): RemoteRecipeRepo {
+    fun providesRemoteRecipeRepo(
+        retrofit: Retrofit,
+        localRecipeRepo: LocalRecipeRepo
+    ): RemoteRecipeRepo {
         val recipeApi = retrofit.create(RecipeApiService::class.java)
         return RemoteRecipeRepo(localRecipeRepo, recipeApi)
     }

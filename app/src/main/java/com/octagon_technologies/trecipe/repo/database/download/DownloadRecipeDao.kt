@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.octagon_technologies.trecipe.repo.network.models.instructions.RecipeInstruction
 
 @Dao
 interface DownloadRecipeDao {
@@ -15,8 +14,8 @@ interface DownloadRecipeDao {
     @Query("SELECT * FROM downloadRecipeEntity")
     suspend fun getAllDownloadRecipes(): List<DownloadRecipeEntity>
 
-    @Query("SELECT recipeInstructions FROM downloadRecipeEntity WHERE recipeId = :recipeId")
-    suspend fun getLocalSelectedRecipe(recipeId: Int): List<RecipeInstruction>?
+    @Query("SELECT * FROM downloadRecipeEntity WHERE recipeId = :recipeId")
+    suspend fun getLocalSelectedRecipe(recipeId: Int): DownloadRecipeEntity?
 
     @Query("DELETE FROM downloadRecipeEntity WHERE recipeId = :recipeId")
     suspend fun deleteDownloadRecipe(recipeId: Int)

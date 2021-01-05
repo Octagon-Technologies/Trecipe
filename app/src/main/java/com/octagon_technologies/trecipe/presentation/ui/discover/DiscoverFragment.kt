@@ -111,20 +111,8 @@ class DiscoverFragment : Fragment() {
             }
 
             groupAdapter.add(eachDiscoverItemGroup)
-//            addAdAfter8Recipes(recipesInRecyclerView.indexOf(it))
         }
     }
-
-//    private fun addAdAfter8Recipes(recipeIndex: Int) {
-//        // Adds an ad after every 8 recipes, ensuring that the
-//        // first recipe doesn't have an ad below it
-//        if (recipeIndex.coerceAtLeast(1) % 8 == 0) {
-//            val discoverAd = AdDiscoverItem(adHelper) { failurePosition ->
-//                groupAdapter.removeGroupAtAdapterPosition(failurePosition)
-//            }
-//            groupAdapter.add(discoverAd)
-//        }
-//    }
 
     private fun setUpClickListeners() {
         binding.searchForRecipesBtn.setOnClickListener {

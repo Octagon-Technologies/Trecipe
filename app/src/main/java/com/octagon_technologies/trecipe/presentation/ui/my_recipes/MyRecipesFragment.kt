@@ -53,14 +53,23 @@ class MyRecipesFragment : Fragment() {
         setUpRecyclerViews()
         selectedRecipeUtils.handleSelectedStateChanges(this)
 
-        viewModel.likedRecipesList.observe(viewLifecycleOwner) {
-            handleLiveDataRecipes(it, likedRecipeGroupAdapter, RecipeType.Liked)
-        }
+
+        // Checks if the recent list was handled. If yes, skip else handleTheRecipe()
         viewModel.recentRecipesList.observe(viewLifecycleOwner) {
-            handleLiveDataRecipes(it, recentRecipeGroupAdapter, RecipeType.Recent)
+            recentRecipeGroupAdapter.clear()
+                handleLiveDataRecipes(it, recentRecipeGroupAdapter, RecipeType.Recent)
         }
+
+        // Checks if the liked list was handled. If yes, skip else handleTheRecipe()
+        viewModel.likedRecipesList.observe(viewLifecycleOwner) {
+            likedRecipeGroupAdapter.clear()
+                handleLiveDataRecipes(it, likedRecipeGroupAdapter, RecipeType.Liked)
+        }
+
+        // Checks if the download list was handled. If yes, skip else handleTheRecipe()
         viewModel.downloadRecipeList.observe(viewLifecycleOwner) {
-            handleLiveDataRecipes(it, downloadRecipeGroupAdapter, RecipeType.Download)
+            downloadRecipeGroupAdapter.clear()
+                handleLiveDataRecipes(it, downloadRecipeGroupAdapter, RecipeType.Download)
         }
 
         selectedRecipeUtils.selectedRecipe.observe(viewLifecycleOwner) {
@@ -115,22 +124,28 @@ class MyRecipesFragment : Fragment() {
             RecipeType.Recent -> {
                 {
                     viewModel.deleteRecentViewedRecipe(it.any as BasicRoomRecipe)
-                    removeGroupAndInvalidateAdapterPositions(recentRecipeGroupAdapter,
-                        it.currentPosition)
+                    removeGroupAndInvalidateAdapterPositions(
+                        recentRecipeGroupAdapter,
+                        it.currentPosition
+                    )
                 }
             }
             RecipeType.Liked -> {
                 {
                     viewModel.deleteLikedRecipe(it.any as BasicRoomRecipe)
-                    removeGroupAndInvalidateAdapterPositions(likedRecipeGroupAdapter,
-                        it.currentPosition)
+                    removeGroupAndInvalidateAdapterPositions(
+                        likedRecipeGroupAdapter,
+                        it.currentPosition
+                    )
                 }
             }
             RecipeType.Download -> {
                 {
                     viewModel.deleteDownloadRecipe(it.any as SelectedRecipe)
-                    removeGroupAndInvalidateAdapterPositions(downloadRecipeGroupAdapter,
-                        it.currentPosition)
+                    removeGroupAndInvalidateAdapterPositions(
+                        downloadRecipeGroupAdapter,
+                        it.currentPosition
+                    )
                 }
             }
         }
@@ -154,19 +169,22 @@ class MyRecipesFragment : Fragment() {
                 handleEmptyAndNullList(
                     binding.recentlyViewedRecyclerView,
                     binding.recentlyViewedError,
-                    binding.likesPlain)
+                    binding.likesPlain
+                )
             }
             likedRecipeGroupAdapter -> {
                 handleEmptyAndNullList(
                     binding.likesRecyclerView,
                     binding.likedError,
-                    binding.downloadPlainText)
+                    binding.downloadPlainText
+                )
             }
             downloadRecipeGroupAdapter -> {
                 handleEmptyAndNullList(
                     binding.downloadRecyclerView,
                     binding.downloadError,
-                    null)
+                    null
+                )
             }
         }
     }

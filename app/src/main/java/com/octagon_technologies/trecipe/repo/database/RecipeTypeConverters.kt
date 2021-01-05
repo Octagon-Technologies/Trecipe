@@ -12,9 +12,7 @@ import com.squareup.moshi.Types
 
 @TypeConverters
 class RecipeTypeConverters {
-    private val moshi = Moshi.Builder()
-//        .add(KotlinJsonAdapterFactory())
-        .build()
+    private val moshi = Moshi.Builder().build()
 
     private val basicRoomJsonAdapter: JsonAdapter<BasicRoomRecipe> =
         moshi.adapter(BasicRoomRecipe::class.java)
@@ -65,10 +63,6 @@ class RecipeTypeConverters {
     @TypeConverter
     fun stringToListOfRecipeInstruction(data: String) =
         listOfRecipeInstructionJsonAdapter.fromJson(data)
-
-    @TypeConverter
-    fun recipeInstructionToString(recipeInstruction: RecipeInstruction): String =
-        recipeInstructionJsonAdapter.toJson(recipeInstruction)
 
     @TypeConverter
     fun stringToRecipeInstruction(data: String) =
