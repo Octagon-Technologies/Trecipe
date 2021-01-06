@@ -8,13 +8,15 @@
     tools:context=".presentation.ui.discover.DiscoverFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/discover_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_70sdp"
         android:background="@android:color/white"
+        android:elevation="@dimen/_5sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="lollipop">
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -48,10 +50,59 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/light_white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/discover_toolbar"
         tools:itemCount="16"
         tools:listitem="@layout/each_discover_item_layout" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="#D5D2D2"
+        app:indicatorSize="@dimen/_45sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackColor="@color/dark_blue"
+        app:trackThickness="@dimen/_4sdp" />
+
+    <ImageView
+        android:id="@+id/error_occurred_image"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:contentDescription="@string/no_network_available"
+        android:src="@drawable/no_network_available"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/error_occurred_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginLeft="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:fontFamily="@font/cabin_medium"
+        android:gravity="center_horizontal"
+        android:text="@string/check_network_connection_error"
+        android:textColor="@color/dark_black"
+        android:textSize="@dimen/_14ssp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/error_occurred_image"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

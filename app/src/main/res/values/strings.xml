@@ -1,10 +1,19 @@
 <resources>
-    <string name="app_name">Foodie</string>
+    <string name="app_name">Trecipe</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="search_for_recipes_plain_text">Search for recipes</string>
 
     <string name="ad_attribution">Ad</string>
+    <string name="check_network_connection_error">Error occurred. Check network connection and try again later.</string>
+    <string name="no_network_available">No network available</string>
+    <string name="no_recipes_found_for_search_query">No recipes found for search query</string>
+    <string name="no_recipe_found">No recipes found</string>
+    <string name="api_limit_exceeded">Api limit exceeded. Try again in an hour. Sorry for the inconvenience</string>
+
+    <string name="no_recently_viewed_recipes_available">No recently viewed recipes available. Whenever you open a recipe, it will be added here.</string>
+    <string name="no_liked_recipes_available">No liked recipes available. Whenever you like a recipe, it will be added here.</string>
+    <string name="no_download_recipes_available">No downloaded recipes available. Whenever you download a recipe, it will be added here.</string>
 
 </resources>

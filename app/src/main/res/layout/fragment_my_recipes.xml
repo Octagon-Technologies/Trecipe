@@ -4,95 +4,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:theme="@style/BlackTextColor"
-    android:layout_height="match_parent"
+    tools:context=".presentation.ui.my_recipes.MyRecipesFragment"
     android:background="@android:color/white"
-    tools:context=".presentation.ui.my_recipes.MyRecipesFragment">
-
-
-    <ImageView
-        android:id="@+id/user_profile_picture"
-        android:layout_width="@dimen/_60sdp"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_marginTop="@dimen/_16sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/history_plain_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:fontFamily="@font/cabin_bold"
-        android:text="Tom and Jerry"
-        android:textSize="@dimen/_20ssp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/cabin_medium"
+        android:text="History"
+        android:textSize="@dimen/_17ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_profile_picture" />
+        app:layout_constraintTop_toBottomOf="@+id/history_plain_text">
 
-    <Button
-        android:id="@+id/search_for_recipes_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginLeft="@dimen/_14sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_14sdp"
-        android:layout_marginRight="@dimen/_14sdp"
-        android:background="@drawable/search_btn_background"
-        android:drawableStart="@drawable/ic_search"
-        android:drawableLeft="@drawable/ic_search"
-        android:drawableTint="@color/light_black"
-        android:fontFamily="@font/cabin"
-        android:paddingStart="@dimen/_8sdp"
-        android:paddingLeft="@dimen/_8sdp"
-        android:paddingEnd="@dimen/_8sdp"
-        android:text="Search for recipes"
-        android:textAllCaps="false"
-        android:textColor="@color/light_black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_name"
-        tools:targetApi="m" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/_20sdp">
 
-    <TextView
-        android:id="@+id/recently_viewed_plain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Recently viewed"
-        android:textSize="@dimen/_16ssp"
-        app:layout_constraintStart_toStartOf="@+id/search_for_recipes_btn"
-        app:layout_constraintTop_toBottomOf="@+id/search_for_recipes_btn" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recently_viewed_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/recently_viewed_plain"
-        app:layout_constraintTop_toBottomOf="@+id/recently_viewed_plain" />
+            <TextView
+                android:id="@+id/recently_viewed_plain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/cabin"
+                android:text="Recently viewed"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/likes_plain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Likes"
-        android:textSize="@dimen/_16ssp"
-        app:layout_constraintStart_toStartOf="@+id/recently_viewed_recycler_view"
-        app:layout_constraintTop_toBottomOf="@+id/recently_viewed_recycler_view" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recently_viewed_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recently_viewed_plain"
+                app:layout_constraintTop_toBottomOf="@+id/recently_viewed_plain"
+                tools:itemCount="1"
+                tools:listitem="@layout/mini_recipe_layout" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/likes_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/likes_plain"
-        app:layout_constraintTop_toBottomOf="@+id/likes_plain" />
+            <TextView
+                android:id="@+id/likes_plain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:fontFamily="@font/cabin"
+                android:text="Likes"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recently_viewed_recycler_view" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/likes_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/mini_recipe_layout"
+                tools:itemCount="1"
+                app:layout_constraintStart_toStartOf="@+id/likes_plain"
+                app:layout_constraintTop_toBottomOf="@+id/likes_plain" />
+
+
+            <TextView
+                android:id="@+id/download_plain_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:fontFamily="@font/cabin"
+                android:text="Downloads"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/likes_recycler_view" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/download_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/download_plain_text"
+                app:layout_constraintTop_toBottomOf="@+id/download_plain_text"
+                tools:itemCount="1"
+                tools:listitem="@layout/mini_recipe_layout"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/recently_viewed_error"
+                style="@style/MyRecipesErrorStyle"
+                android:text="@string/no_recently_viewed_recipes_available"
+                android:textColor="@color/light_black"
+                android:textSize="@dimen/_14ssp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recently_viewed_plain"
+                app:layout_constraintTop_toBottomOf="@+id/recently_viewed_plain" />
+
+            <TextView
+                android:id="@+id/liked_error"
+                style="@style/MyRecipesErrorStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_liked_recipes_available"
+                android:textColor="@color/light_black"
+                android:textSize="@dimen/_14ssp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/likes_plain" />
+
+            <TextView
+                android:id="@+id/download_error"
+                style="@style/MyRecipesErrorStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_download_recipes_available"
+                android:textColor="@color/light_black"
+                android:textSize="@dimen/_14ssp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/download_plain_text"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
