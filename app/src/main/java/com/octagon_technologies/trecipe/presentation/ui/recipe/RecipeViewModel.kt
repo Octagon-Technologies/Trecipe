@@ -1,6 +1,5 @@
 package com.octagon_technologies.trecipe.presentation.ui.recipe
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,13 +10,15 @@ import com.octagon_technologies.trecipe.repo.database.LocalRecipeRepo
 import com.octagon_technologies.trecipe.repo.network.RemoteRecipeRepo
 import com.octagon_technologies.trecipe.repo.network.models.instructions.RecipeInstruction
 import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.SelectedRecipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class RecipeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
     private val remoteRecipeRepo: RemoteRecipeRepo,
     private val localRecipeRepo: LocalRecipeRepo,
 ) : ViewModel() {

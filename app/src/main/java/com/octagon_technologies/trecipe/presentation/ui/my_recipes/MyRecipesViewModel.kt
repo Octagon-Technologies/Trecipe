@@ -1,6 +1,5 @@
 package com.octagon_technologies.trecipe.presentation.ui.my_recipes
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +8,12 @@ import com.octagon_technologies.trecipe.models.BasicRoomRecipe
 import com.octagon_technologies.trecipe.repo.database.LocalRecipeRepo
 import com.octagon_technologies.trecipe.repo.network.RemoteRecipeRepo
 import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.SelectedRecipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyRecipesViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MyRecipesViewModel @Inject constructor(
     private val remoteRecipeRepo: RemoteRecipeRepo,
     private val localRecipeRepo: LocalRecipeRepo
 ) : ViewModel() {
@@ -54,11 +56,13 @@ class MyRecipesViewModel @ViewModelInject constructor(
             localRecipeRepo.deleteLikedRecipe(basicRoomRecipe)
         }
     }
+
     fun deleteRecentViewedRecipe(basicRoomRecipe: BasicRoomRecipe) {
         viewModelScope.launch {
             localRecipeRepo.deleteRecentRecipe(basicRoomRecipe)
         }
     }
+
     fun deleteDownloadRecipe(selectedRecipe: SelectedRecipe) {
         viewModelScope.launch {
             localRecipeRepo.deleteDownloadRecipe(selectedRecipe)

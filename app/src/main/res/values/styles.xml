@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="AppTheme" parent="Theme.Material3.DayNight">
+
+    </style>
+
+    <style name="AppTheme.Starting" parent="Theme.SplashScreen">
+        <!-- Use windowSplashScreenAnimatedIcon to add a drawable or an animated
+     drawable. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/trecipe_icon</item>
+        <!-- Set the theme of the Activity that follows your splash screen. -->
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+        <!-- Set a white background behind the splash screen icon. -->
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/white</item>
+        <!-- Set the splash screen background to white -->
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+    </style>
+
+
     <style name="MyRecipesErrorStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

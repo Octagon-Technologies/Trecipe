@@ -1,6 +1,5 @@
 package com.octagon_technologies.trecipe.presentation.ui.discover
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.octagon_technologies.trecipe.models.State
 import com.octagon_technologies.trecipe.repo.network.RemoteRecipeRepo
 import com.octagon_technologies.trecipe.repo.network.models.random_recipes.RandomRecipe
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DiscoverViewModel @ViewModelInject constructor(
+@HiltViewModel
+class DiscoverViewModel @Inject constructor(
     private val remoteRecipeRepo: RemoteRecipeRepo,
 ) : ViewModel() {
     private val _listOfRandomRecipes = MutableLiveData<List<RandomRecipe>>()

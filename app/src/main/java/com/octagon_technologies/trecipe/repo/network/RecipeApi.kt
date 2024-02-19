@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 // For base url: https://api.spoonacular.com/
 // Api key: fe85a32ea0034f4f8577d9b3a5006011
-interface RecipeApiService {
+interface RecipeApi {
 
     // https://api.spoonacular.com/recipes/716429/information?apiKey=fe85a32ea0034f4f8577d9b3a5006011&includeNutrition=false
     @GET("recipes/{recipeId}/information?apiKey=${Constants.recipe_api_key}&includeNutrition=true")

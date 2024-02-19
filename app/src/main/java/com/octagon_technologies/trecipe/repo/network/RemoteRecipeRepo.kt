@@ -18,7 +18,7 @@ class RemoteRecipeRepo @Inject constructor(
 //    @ApplicationContext private val context: Context,
 //    private val moshi: Moshi,
     private val localRecipeRepo: LocalRecipeRepo,
-    private val retrofitApiService: RecipeApiService,
+    private val retrofitApiService: RecipeApi,
 ) {
 //    val randomRecipesJsonAdapter: JsonAdapter<Recipes> = moshi.adapter(Recipes::class.java)
 //

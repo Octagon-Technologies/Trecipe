@@ -20,12 +20,7 @@ class FilterTabItem(
         binding.root.updatePadding(right = ResUtils.getPixelsFromSdp(context, R.dimen._10sdp))
         binding.root.compoundDrawablePadding = ResUtils.getPixelsFromSdp(context, R.dimen._10sdp)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            binding.root.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null)
-        } else {
-            drawable?.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
-            binding.root.setCompoundDrawables(null, null, drawable, null)
-        }
+        binding.root.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null)
 
         binding.root.setOnClickListener { onCloseBtnClicked() }
     }

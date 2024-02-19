@@ -1,6 +1,5 @@
 package com.octagon_technologies.trecipe.presentation.ui.search
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.octagon_technologies.trecipe.models.State
 import com.octagon_technologies.trecipe.repo.network.RemoteRecipeRepo
 import com.octagon_technologies.trecipe.repo.network.models.suggestions.RecipeSuggestion
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel @ViewModelInject constructor(private val remoteRecipeRepo: RemoteRecipeRepo) :
+@HiltViewModel
+class SearchViewModel @Inject constructor(private val remoteRecipeRepo: RemoteRecipeRepo) :
     ViewModel() {
 
     val query = MutableLiveData("")

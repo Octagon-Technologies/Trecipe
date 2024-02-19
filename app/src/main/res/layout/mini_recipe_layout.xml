@@ -5,7 +5,6 @@
     android:layout_width="@dimen/_140sdp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/_10sdp"
-    android:layout_marginRight="@dimen/_10sdp"
     android:background="@android:color/white"
     android:theme="@style/BlackTextColor">
 
@@ -28,7 +27,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/advent_pro_medium"
         android:maxLines="2"
-        android:text="Homemade Broccoli Cheddar Soup"
+        tools:text="Homemade Broccoli Cheddar Soup"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintStart_toStartOf="@+id/mini_recipe_image"
         app:layout_constraintTop_toBottomOf="@+id/mini_recipe_image" />

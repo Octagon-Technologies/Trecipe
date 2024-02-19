@@ -9,10 +9,11 @@ import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.Sele
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 @TypeConverters
 class RecipeTypeConverters {
-    private val moshi = Moshi.Builder().build()
+    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     private val basicRoomJsonAdapter: JsonAdapter<BasicRoomRecipe> =
         moshi.adapter(BasicRoomRecipe::class.java)
