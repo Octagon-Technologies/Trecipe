@@ -12,6 +12,8 @@ data class SavedRecipeEntity (
 ////     have both right now coz we are still NOOBS :)
     @ColumnInfo("simple_recipe")
     val simpleRecipe: SimpleRecipe,
+
+    val dateAddedToDB: Long = System.currentTimeMillis(),
 //
 //    @ColumnInfo("recipe_details")
 //    val recipeDetails: RecipeDetails,

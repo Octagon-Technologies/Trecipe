@@ -7,6 +7,7 @@ import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 @Entity(tableName = "recentRecipeEntity")
 data class RecentRecipeEntity(
     val simpleRecipe: SimpleRecipe,
+    val dateAddedToDB: Long = System.currentTimeMillis(),
 
     @PrimaryKey
     val recipeId: Int = simpleRecipe.recipeId

@@ -1,6 +1,7 @@
 package com.octagon_technologies.trecipe.presentation.ui.recipe.similar_recipe
 
 import android.view.View
+import android.widget.ImageView
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.MiniRecipeLayoutBinding
 import com.octagon_technologies.trecipe.domain.similar_recipe.SimilarRecipe
@@ -26,15 +27,19 @@ class MiniRecipeGroup(
 
         binding.root.setOnClickListener { openRecipe() }
 
-        binding.saveBtn.setImageResource(getSaveImage())
+        binding.saveBtn.updateSaveImage()
         binding.saveBtn.setOnClickListener {
             isSaved = !isSaved
-            getSaveImage()
+
+            binding.saveBtn.updateSaveImage()
             saveOrUnsaveRecipe()
         }
     }
 
-    private fun getSaveImage() = if (isSaved) R.drawable.save_filled else R.drawable.save_border
+    private fun ImageView.updateSaveImage() =
+        setImageResource(
+            if (isSaved) R.drawable.save_filled else R.drawable.save_border
+        )
 
     override fun getLayout() = R.layout.mini_recipe_layout
     override fun initializeViewBinding(view: View): MiniRecipeLayoutBinding =

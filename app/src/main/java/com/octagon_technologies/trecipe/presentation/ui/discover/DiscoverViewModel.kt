@@ -47,7 +47,7 @@ class DiscoverViewModel @Inject constructor(
     fun fetchTryOutRecipes() =
         viewModelScope.launch { _tryRecipesResult.value = recipeRepo.getTryOutRecipes() }
 
-    fun isSaved(discoverRecipe: DiscoverRecipe) =
+    suspend fun isSaved(discoverRecipe: DiscoverRecipe) =
         localRecipeRepo.isSaved(discoverRecipe.recipeId)
 
     fun saveOrUnSaveRecipe(discoverRecipe: DiscoverRecipe) =

@@ -7,25 +7,30 @@ import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 import com.octagon_technologies.trecipe.utils.loadImage
 import com.xwray.groupie.viewbinding.BindableItem
 
-class SavedMiniRecipeGroup(private val simpleRecipe: SimpleRecipe, private var isSaved: Boolean, private val saveOrUnSaveRecipe: () -> Unit): BindableItem<MiniRecipeLayoutBinding>() {
+class SavedMiniRecipeGroup(
+    private val simpleRecipe: SimpleRecipe,
+    private val openRecipe: () -> Unit,
+    private val removeFromCategory: () -> Unit
+): BindableItem<MiniRecipeLayoutBinding>() {
 
+    /**
+     * This is the group we'll use across Recent, Saved and Liked tabs.
+     * Therefore, we change the Saved button to a Minus button which the user presses to remove
+     * to remove the recipe from the respective category
+     *
+     * KINDA messed up but sorryyyyyy, future maintainer :)
+     */
     override fun bind(binding: MiniRecipeLayoutBinding, position: Int) {
         binding.miniRecipeName.text = simpleRecipe.recipeName
         binding.miniRecipeImage.loadImage(simpleRecipe.recipeImage, R.drawable.loading_food)
-        binding.saveBtn.setImageResource(getSaveImage())
-        binding.saveBtn.setOnClickListener { saveOrUnSaveRecipe() }
+        binding.saveBtn.setImageResource(R.drawable.minus)
+        binding.saveBtn.setOnClickListener { removeFromCategory() }
 
         binding.miniRecipeRating.visibility = View.GONE
         binding.miniRecipeTime.visibility = View.GONE
 
-        binding.saveBtn.setOnClickListener {
-            isSaved = !isSaved
-            getSaveImage()
-            saveOrUnSaveRecipe()
-        }
+        binding.saveBtn.setOnClickListener { removeFromCategory() }
     }
-
-    private fun getSaveImage() = if (isSaved) R.drawable.save_filled else R.drawable.save_border
 
     override fun getLayout(): Int = R.layout.mini_recipe_layout
     override fun initializeViewBinding(view: View): MiniRecipeLayoutBinding =

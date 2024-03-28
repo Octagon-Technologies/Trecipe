@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentDiscoverBinding
@@ -17,6 +18,9 @@ import com.octagon_technologies.trecipe.utils.showShortSnackBar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -78,11 +82,18 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             if (result is Resource.Success || result.data != null) {
                 Timber.d("viewModel.dailyRecipesResult is ${result.data}")
                 if (result.data != null) {
-                    groupAdapter.addAll(transformDiscoverRecipes(result.data))
-                    shimmer.stopShimmer()
-                    shimmer.visibility = View.GONE
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val discoverRecipes = transformDiscoverRecipes(result.data)
 
-                    binding.dailyInspirationRecyclerview.visibility = View.VISIBLE
+                        withContext(Dispatchers.Main) {
+                            Timber.d("Adding discoverRecipes ~ size: ${discoverRecipes.size}")
+                            groupAdapter.addAll(discoverRecipes)
+                            shimmer.stopShimmer()
+                            shimmer.visibility = View.GONE
+
+                            binding.dailyInspirationRecyclerview.visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
 
@@ -91,20 +102,22 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         }
     }
 
-    private fun transformDiscoverRecipes(discoverRecipes: List<DiscoverRecipe>): List<LargeRecipeGroup> =
-        discoverRecipes.map { discoverRecipe ->
-            LargeRecipeGroup(
-                discoverRecipe = discoverRecipe,
-                isSaved = viewModel.isSaved(discoverRecipe),
-                saveOrUnsaveRecipe = { viewModel.saveOrUnSaveRecipe(discoverRecipe) },
-                openRecipe = {
-                    findNavController().navigate(
-                        DiscoverFragmentDirections.actionDiscoverFragmentToRecipeFragment(
-                            discoverRecipe.recipeId
+    private suspend fun transformDiscoverRecipes(discoverRecipes: List<DiscoverRecipe>): List<LargeRecipeGroup> =
+        withContext(Dispatchers.IO) {
+            discoverRecipes.map { discoverRecipe ->
+                LargeRecipeGroup(
+                    discoverRecipe = discoverRecipe,
+                    isSaved = viewModel.isSaved(discoverRecipe),
+                    saveOrUnsaveRecipe = { viewModel.saveOrUnSaveRecipe(discoverRecipe) },
+                    openRecipe = {
+                        findNavController().navigate(
+                            DiscoverFragmentDirections.actionDiscoverFragmentToRecipeFragment(
+                                discoverRecipe.recipeId
+                            )
                         )
-                    )
-                }
-            )
+                    }
+                )
+            }
         }
 
 
@@ -150,11 +163,17 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             if (result is Resource.Success || result.data != null) {
                 Timber.d("viewModel.tryRecipesResult is ${result.data}")
                 if (result.data != null) {
-                    groupAdapter.addAll(transformTryOutRecipes(result.data))
-                    shimmer.stopShimmer()
-                    shimmer.visibility = View.GONE
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val tryOutRecipes = transformTryOutRecipes(result.data)
 
-                    binding.tryOutRecyclerview.visibility = View.VISIBLE
+                        withContext(Dispatchers.Main) {
+                            groupAdapter.addAll(tryOutRecipes)
+                            shimmer.stopShimmer()
+                            shimmer.visibility = View.GONE
+
+                            binding.tryOutRecyclerview.visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
 
@@ -197,23 +216,25 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 //        }
     }
 
-    private fun transformTryOutRecipes(tryOutRecipes: List<DiscoverRecipe>) =
-        tryOutRecipes.map { discoverRecipe ->
-            MiniRecipeGroup(
-                similarRecipe = discoverRecipe.toSimilarRecipe(),
-                isSaved = viewModel.isSaved(discoverRecipe),
-                openRecipe = {
-                    findNavController().navigate(
-                        DiscoverFragmentDirections.actionDiscoverFragmentToRecipeFragment(
-                            discoverRecipe.recipeId
+    private suspend fun transformTryOutRecipes(tryOutRecipes: List<DiscoverRecipe>) =
+        withContext(Dispatchers.IO) {
+            tryOutRecipes.map { discoverRecipe ->
+                MiniRecipeGroup(
+                    similarRecipe = discoverRecipe.toSimilarRecipe(),
+                    isSaved = viewModel.isSaved(discoverRecipe),
+                    openRecipe = {
+                        findNavController().navigate(
+                            DiscoverFragmentDirections.actionDiscoverFragmentToRecipeFragment(
+                                discoverRecipe.recipeId
+                            )
                         )
-                    )
-                },
-                saveOrUnsaveRecipe = { viewModel.saveOrUnSaveRecipe(discoverRecipe) }
-            )
+                    },
+                    saveOrUnsaveRecipe = { viewModel.saveOrUnSaveRecipe(discoverRecipe) }
+                )
+            }
         }
-}
 
+}
 /*
 TODO: Add recyclerview tracking for loading more recipes when it reaches close to the end
 

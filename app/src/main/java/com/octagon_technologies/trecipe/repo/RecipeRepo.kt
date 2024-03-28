@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -40,10 +41,11 @@ class RecipeRepo @Inject constructor(
             Timber.e(e)
             val localDailyRecipes = dailyRecipeDao.getDailyRecipesOneShot()?.listOfDiscoverRecipe
 
-            if (e is UnknownHostException)
-                return@withContext Resource.Error(ErrorType.NoNetworkError, localDailyRecipes)
-            else if (e is HttpException)
-                return@withContext Resource.Error(ErrorType.ApiError, localDailyRecipes)
+            when (e) {
+                is UnknownHostException -> return@withContext Resource.Error(ErrorType.NoNetworkError, localDailyRecipes)
+                is SocketTimeoutException -> return@withContext Resource.Error(ErrorType.ApiError, localDailyRecipes)
+                is HttpException -> return@withContext Resource.Error(ErrorType.ApiError, localDailyRecipes)
+            }
         }
 
         val localDailyRecipes = dailyRecipeDao.getDailyRecipesOneShot()?.listOfDiscoverRecipe
@@ -69,10 +71,11 @@ class RecipeRepo @Inject constructor(
             Timber.e(e)
             val localTryOutRecipes = tryOutRecipeDao.getTryOutRecipes()?.listOfDiscoverRecipe
 
-            if (e is UnknownHostException)
-                return@withContext Resource.Error(ErrorType.NoNetworkError, localTryOutRecipes)
-            else if (e is HttpException)
-                return@withContext Resource.Error(ErrorType.ApiError, localTryOutRecipes)
+            when (e) {
+                is UnknownHostException -> return@withContext Resource.Error(ErrorType.NoNetworkError, localTryOutRecipes)
+                is SocketTimeoutException -> return@withContext Resource.Error(ErrorType.ApiError, localTryOutRecipes)
+                is HttpException -> return@withContext Resource.Error(ErrorType.ApiError, localTryOutRecipes)
+            }
         }
 
         val localTryOutRecipes = tryOutRecipeDao.getTryOutRecipes()?.listOfDiscoverRecipe

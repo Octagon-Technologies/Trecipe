@@ -1,6 +1,8 @@
 package com.octagon_technologies.trecipe.presentation.ui.discover.large_discover_card
 
+import android.media.Image
 import android.view.View
+import android.widget.ImageView
 import androidx.core.text.HtmlCompat
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.LargeRecipeCardBinding
@@ -28,16 +30,20 @@ class LargeRecipeGroup(
         binding.largeRecipeTime.text = discoverRecipe.toRecipeTime()
 
         binding.root.setOnClickListener { openRecipe() }
+        binding.saveBtn.updateSaveImage()
 
-        binding.saveBtn.setImageResource(getSaveImage())
         binding.saveBtn.setOnClickListener {
             isSaved = !isSaved
-            getSaveImage()
+            binding.saveBtn.updateSaveImage()
             saveOrUnsaveRecipe()
         }
     }
 
-    private fun getSaveImage() = if (isSaved) R.drawable.save_filled else R.drawable.save_border
+    private fun ImageView.updateSaveImage() {
+        setImageResource(
+            if (isSaved) R.drawable.save_filled else R.drawable.save_border
+        )
+    }
 
 
     override fun getLayout() = R.layout.large_recipe_card

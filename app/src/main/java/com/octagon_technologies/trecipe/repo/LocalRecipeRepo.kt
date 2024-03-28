@@ -1,5 +1,6 @@
 package com.octagon_technologies.trecipe.repo
 
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import com.octagon_technologies.trecipe.domain.recipe.RecipeDetails
 import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
@@ -9,27 +10,66 @@ import com.octagon_technologies.trecipe.repo.database.saved.SavedRecipeDao
 import com.octagon_technologies.trecipe.repo.dto.toLikedRecipe
 import com.octagon_technologies.trecipe.repo.dto.toRecentRecipe
 import com.octagon_technologies.trecipe.repo.dto.toSavedRecipe
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.plus
 import timber.log.Timber
 import javax.inject.Inject
 
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class LocalRecipeRepo @Inject constructor(
     private val likedRecipeDao: LikedRecipeDao,
     private val recentRecipeDao: RecentRecipeDao,
-    private val savedRecipeDao: SavedRecipeDao,
-//    private val randomRecipeDao: RandomRecipesDao
+    private val savedRecipeDao: SavedRecipeDao
 ) {
+    private val job = Job()
+    private val coroutineScope = CoroutineScope(Dispatchers.Main) + job
 
     val likedRecipes = likedRecipeDao.getAllLikedRecipes()
-        .map { list -> list?.map { it.simpleRecipe } }
+        .map { list ->
+            with(Dispatchers.IO) {
+                val sortedList = list?.sortedByDescending { it.dateAddedToDB }
+                sortedList?.map { it.simpleRecipe }
+            }
+        }
+        .asLiveData()
+
     val recentRecipes = recentRecipeDao.getAllRecentRecipe()
-        .map { list -> list?.map { it.simpleRecipe } }
+        .map { list ->
+            with(Dispatchers.IO) {
+                val sortedList = list?.sortedByDescending { it.dateAddedToDB }
+                sortedList?.map { it.simpleRecipe }
+            }
+        }
+        .asLiveData()
+
     val savedRecipes = savedRecipeDao.getSavedSimpleRecipes()
-        .map { list -> list?.map { it.simpleRecipe } }
+        .onEach {
+            Timber.d("onEach called: $it")
+        }
+        .map { list ->
+            Timber.d("savedRecipes in map{} is $list")
+            with(Dispatchers.IO) {
+                val sortedList = list?.sortedByDescending { it.dateAddedToDB }
+                sortedList?.map { it.simpleRecipe }
+            }
+        }
+        .stateIn(coroutineScope, SharingStarted.Eagerly, listOf())
+
 
     val likedRecipeIds = likedRecipes.map { list -> list?.map { it.recipeId } }
     val savedRecipesIds = savedRecipes.map { list -> list?.map { it.recipeId } }
+        .stateIn(coroutineScope, SharingStarted.Eagerly, listOf())
 
-    fun isSaved(recipeId: Int): Boolean  {
+    fun isSaved(recipeId: Int): Boolean {
         val isSaved = savedRecipesIds.value?.contains(recipeId) ?: false
         Timber.d("isSaved is $isSaved")
         Timber.d("recipeId is $recipeId while savedRecipesIds is ${savedRecipesIds.value}")
@@ -38,19 +78,17 @@ class LocalRecipeRepo @Inject constructor(
 
     suspend fun likeOrUnLikeRecipe(recipeDetails: RecipeDetails) {
         if (likedRecipeIds.value?.contains(recipeDetails.recipeId) == true)
-            deleteLikedRecipe(recipeDetails)
+            removeFromLiked(recipeDetails.recipeId)
         else
             insertLikedRecipe(recipeDetails)
     }
 
     suspend fun saveOrUnSaveRecipe(simpleRecipe: SimpleRecipe) {
-        Timber.d("savedRecipesIds.value is ${savedRecipesIds.value}")
-
         val alreadySaved = savedRecipesIds.value?.contains(simpleRecipe.recipeId)
-        Timber.d("alreadySaved is $alreadySaved")
+        Timber.d("savedRecipesIds in saveOrUnSaveRecipe() are ${savedRecipesIds.value}")
 
         if (alreadySaved == true)
-            deleteSavedRecipe(simpleRecipe.recipeId)
+            removeFromSaved(simpleRecipe.recipeId)
         else
             insertSavedRecipe(simpleRecipe)
     }
@@ -59,8 +97,9 @@ class LocalRecipeRepo @Inject constructor(
         likedRecipeDao.insertLikedRecipeEntity(recipeDetails.toLikedRecipe())
     }
 
-    private suspend fun deleteLikedRecipe(recipeDetails: RecipeDetails) {
-        likedRecipeDao.deleteLikedRecipe(recipeDetails.toLikedRecipe())
+    suspend fun removeFromLiked(recipeId: Int) {
+        val rowsDeleted = likedRecipeDao.deleteLikedRecipe(recipeId)
+        Timber.d("isDeleted is $rowsDeleted")
     }
 
 
@@ -68,7 +107,9 @@ class LocalRecipeRepo @Inject constructor(
         recentRecipeDao.insertRecentRecipeEntity(recipeDetails.toRecentRecipe())
     }
 
-    suspend fun clearRecentRecipes() { recentRecipeDao.clearRecentRecipes() }
+    suspend fun removeFromRecent(recipeId: Int) {
+        recentRecipeDao.removeFromRecent(recipeId)
+    }
 
     private suspend fun insertSavedRecipe(simpleRecipe: SimpleRecipe) {
         savedRecipeDao.insertData(simpleRecipe.toSavedRecipe())
@@ -80,11 +121,16 @@ class LocalRecipeRepo @Inject constructor(
         savedRecipeDao.updateSavedRecipes(simpleRecipe.map { it.toSavedRecipe() })
     }
 
-    suspend fun deleteSavedRecipe(recipeId: Int) {
+    suspend fun removeFromSaved(recipeId: Int) {
         savedRecipeDao.deleteSavedRecipe(recipeId)
         Timber.d("deleteSavedRecipe called in LocalRecipeRepo with recipeDetails.recipeId as $recipeId")
     }
 
+    // TODO: Know where to call this function.... As of now, I just know it's needed somewhere
+    fun onDestroy() {
+        job.cancel()
+        coroutineScope.cancel()
+    }
 
 //    suspend fun insertRandomRecipes(randomRecipes: List<RandomRecipe>?) {
 //        val randomRecipesEntity = RandomRecipesEntity(randomRecipes ?: listOf())

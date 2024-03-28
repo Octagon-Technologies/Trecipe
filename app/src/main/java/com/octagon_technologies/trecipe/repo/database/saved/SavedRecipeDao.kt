@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 import com.octagon_technologies.trecipe.repo.database.BaseDao
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class SavedRecipeDao: BaseDao<SavedRecipeEntity> {
@@ -15,7 +16,7 @@ abstract class SavedRecipeDao: BaseDao<SavedRecipeEntity> {
     abstract suspend fun updateSavedRecipes(savedRecipe: List<SavedRecipeEntity>)
 
     @Query("SELECT * FROM savedRecipeEntity")
-    abstract fun getSavedSimpleRecipes(): LiveData<List<SavedRecipeEntity>?>
+    abstract fun getSavedSimpleRecipes(): Flow<List<SavedRecipeEntity>?>
 
     @Query("SELECT simple_recipe FROM savedRecipeEntity")
     abstract suspend fun getSavedRecipes(): List<SimpleRecipe>?

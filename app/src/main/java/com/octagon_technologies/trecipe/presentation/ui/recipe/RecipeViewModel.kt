@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.octagon_technologies.trecipe.domain.Resource
 import com.octagon_technologies.trecipe.domain.recipe.RecipeDetails
@@ -13,6 +14,7 @@ import com.octagon_technologies.trecipe.repo.RecipeRepo
 import com.octagon_technologies.trecipe.repo.SelectedRecipeRepo
 import com.octagon_technologies.trecipe.repo.dto.toSimpleRecipe
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,11 +41,12 @@ class RecipeViewModel @Inject constructor(
 
 
     val isSaved = MediatorLiveData<Boolean>().apply {
-        addSource(localRecipeRepo.savedRecipesIds) {
+        val savedRecipes = localRecipeRepo.savedRecipesIds.asLiveData()
+        addSource(savedRecipes) {
             value = it.checkIsSaved()
         }
         addSource(recipeDetails) {
-            value = localRecipeRepo.savedRecipesIds.value.checkIsSaved()
+            value = savedRecipes.value.checkIsSaved()
         }
     }
     private fun List<Int>?.checkIsSaved() = this?.contains(recipeDetails.value?.data?.recipeId) == true
@@ -76,7 +79,7 @@ class RecipeViewModel @Inject constructor(
 
 
 
-    fun isSuggestedRecipeSaved(similarRecipe: SimilarRecipe) =
+    suspend fun isSuggestedRecipeSaved(similarRecipe: SimilarRecipe) =
         localRecipeRepo.isSaved(similarRecipe.toSimpleRecipe().recipeId)
 
     fun saveOrUnSaveSuggestedRecipe(similarRecipe: SimilarRecipe) {

@@ -50,6 +50,10 @@
         android:id="@+id/myRecipesFragment"
         android:name="com.octagon_technologies.trecipe.presentation.ui.my_recipes.MyRecipesFragment"
         android:label="fragment_my_recipes"
-        tools:layout="@layout/fragment_my_recipes" />
+        tools:layout="@layout/fragment_my_recipes" >
+        <action
+            android:id="@+id/action_myRecipesFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
 
 </navigation>

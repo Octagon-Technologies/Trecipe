@@ -4,6 +4,7 @@ import com.octagon_technologies.trecipe.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
@@ -33,7 +34,10 @@ suspend fun <T> doOperation(operation: suspend () -> Resource<T> ): Resource<T> 
         operation()
     } catch (noNetworkError: UnknownHostException) {
         Resource.Error(ErrorType.NoNetworkError)
-    } catch (apiError: HttpException) {
+    } catch (timeOut: SocketTimeoutException) {
+        Resource.Error(ErrorType.ApiError)
+    }
+    catch (apiError: HttpException) {
         Resource.Error(ErrorType.ApiError)
     }
 }

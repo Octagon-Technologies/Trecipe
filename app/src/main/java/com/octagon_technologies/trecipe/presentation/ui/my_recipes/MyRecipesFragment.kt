@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentMyRecipesBinding
+import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 import com.octagon_technologies.trecipe.presentation.ui.my_recipes.tab_layout.SavedTabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +41,6 @@ class MyRecipesFragment : Fragment(R.layout.fragment_my_recipes) {
                 }
             }
 
-        tabLayout.setSelectedTabIndicator(R.drawable.tab_indicator)
         TabLayoutMediator(
             tabLayout,
             viewPager2,
@@ -51,12 +51,28 @@ class MyRecipesFragment : Fragment(R.layout.fragment_my_recipes) {
     inner class MyFragmentStateAdapter : FragmentStateAdapter(this) {
         override fun getItemCount(): Int = 3
 
-        override fun createFragment(position: Int): Fragment =
-            when (position) {
-                0 -> SavedTabLayout.getInstance(viewModel.recentRecipes)
-                1 -> SavedTabLayout.getInstance(viewModel.likedRecipes)
-                2 -> SavedTabLayout.getInstance(viewModel.savedRecipes)
+        override fun createFragment(position: Int): Fragment {
+            val openRecipe: (SimpleRecipe) -> Unit = {
+                MyRecipesFragmentDirections.actionMyRecipesFragmentToRecipeFragment(it.recipeId)
+            }
+            return when (position) {
+                0 -> SavedTabLayout.getInstance(
+                    recipeList = viewModel.recentRecipes,
+                    openRecipe = openRecipe
+                ) { viewModel.removeFromRecent(it) }
+
+                1 -> SavedTabLayout.getInstance(
+                    recipeList = viewModel.likedRecipes,
+                    openRecipe = openRecipe
+                ) { viewModel.removeFromLiked(it) }
+
+                2 -> SavedTabLayout.getInstance(
+                    recipeList = viewModel.savedRecipes,
+                    openRecipe = openRecipe
+                ) { viewModel.removeFromSaved(it) }
+
                 else -> throw IndexOutOfBoundsException("Position is $position")
             }
+        }
     }
 }

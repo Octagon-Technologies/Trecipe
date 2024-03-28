@@ -2,6 +2,7 @@ package com.octagon_technologies.trecipe.repo.database.liked
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LikedRecipeDao {
@@ -10,9 +11,9 @@ interface LikedRecipeDao {
     suspend fun insertLikedRecipeEntity(likedRecipeEntity: LikedRecipeEntity)
 
     @Query("SELECT * FROM likedRecipeEntity")
-    fun getAllLikedRecipes(): LiveData<List<LikedRecipeEntity>?>
+    fun getAllLikedRecipes(): Flow<List<LikedRecipeEntity>?>
 
     // Replace this with an id Delete
-    @Delete
-    suspend fun deleteLikedRecipe(likedRecipeEntity: LikedRecipeEntity)
+    @Query("DELETE FROM likedRecipeEntity WHERE recipeId = :recipeId")
+    suspend fun deleteLikedRecipe(recipeId: Int): Int
 }
