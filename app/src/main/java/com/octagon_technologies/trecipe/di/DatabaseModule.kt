@@ -2,7 +2,6 @@ package com.octagon_technologies.trecipe.di
 
 import android.content.Context
 import androidx.room.Room
-import com.octagon_technologies.trecipe.repo.database.LocalRecipeRepo
 import com.octagon_technologies.trecipe.repo.database.RecipeDatabase
 import dagger.Module
 import dagger.Provides
@@ -21,6 +20,17 @@ object DatabaseModule {
             .build()
 
     @Provides
-    fun providesLocalRecipeRepo(recipeDatabase: RecipeDatabase) =
-        LocalRecipeRepo(recipeDatabase)
+    fun providesLikedDao(recipeDatabase: RecipeDatabase) = recipeDatabase.likedRecipeDao
+    @Provides
+    fun providesRecentDao(recipeDatabase: RecipeDatabase) = recipeDatabase.recentRecipeDao
+    @Provides
+    fun providesSavedDao(recipeDatabase: RecipeDatabase) = recipeDatabase.savedRecipeDao
+    @Provides
+    fun providesDailyRecipeDao(recipeDatabase: RecipeDatabase) = recipeDatabase.dailyRecipeDao
+
+    @Provides
+    fun providesTryOutDao(recipeDatabase: RecipeDatabase) = recipeDatabase.tryOutRecipeDao
+
+    @Provides
+    fun providesRecentAutoCompleteRecipeDao(recipeDatabase: RecipeDatabase) = recipeDatabase.recentAutoCompleteDao
 }

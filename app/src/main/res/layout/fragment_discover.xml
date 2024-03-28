@@ -1,108 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/light_white"
-    tools:context=".presentation.ui.discover.DiscoverFragment">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/discover_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_70sdp"
-        android:background="@android:color/white"
-        android:elevation="@dimen/_5sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:targetApi="lollipop">
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/plain_daily_inspiration"
+            style="@style/header_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/daily_inspiration"
+            android:textSize="@dimen/_17ssp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/search_for_recipes_btn"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/daily_inspiration_recyclerview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_6sdp"
-            android:layout_marginEnd="@dimen/_6sdp"
-            android:background="@drawable/search_btn_background"
-            android:drawableStart="@drawable/ic_search"
-            android:drawableLeft="@drawable/ic_search"
-            android:drawableTint="@color/light_black"
-            android:fontFamily="@font/cabin"
-            android:paddingStart="@dimen/_8sdp"
-            android:paddingLeft="@dimen/_8sdp"
-            android:paddingRight="@dimen/_8sdp"
-            android:text="@string/search_for_recipes_plain_text"
-            android:textAllCaps="false"
-            android:textColor="@color/light_black"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:minHeight="@dimen/_300sdp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/plain_daily_inspiration"
+            app:layout_constraintTop_toBottomOf="@+id/plain_daily_inspiration"
+            tools:listitem="@layout/large_recipe_card" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/daily_inspiration_shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:minHeight="@dimen/_300sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/plain_daily_inspiration"
+            app:layout_constraintTop_toBottomOf="@+id/plain_daily_inspiration">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_300sdp"
+                android:layout_marginStart="@dimen/_8sdp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_300sdp">
+
+                    <include layout="@layout/shimmer_large_recipe_card" />
+                    <include layout="@layout/shimmer_large_recipe_card" />
+                    <include layout="@layout/shimmer_large_recipe_card" />
+                    <include layout="@layout/shimmer_large_recipe_card" />
+                    <include layout="@layout/shimmer_large_recipe_card" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+<!--        <com.google.android.material.progressindicator.CircularProgressIndicator-->
+<!--            android:id="@+id/daily_progress_bar"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:indeterminate="true"-->
+<!--            app:indicatorColor="@color/grey_blue"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/daily_inspiration_recyclerview"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/daily_inspiration_recyclerview"-->
+<!--            app:trackColor="@color/dark_orange"-->
+<!--            tools:visibility="gone" />-->
+
+        <TextView
+            android:id="@+id/daily_no_network_here"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/advent_pro_medium"
+            android:text="@string/wi_fi_is_not_available"
+            android:textSize="@dimen/_18ssp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/daily_inspiration_recyclerview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:targetApi="m" />
+            app:layout_constraintTop_toTopOf="@+id/daily_inspiration_recyclerview" />
+
+        <TextView
+            android:id="@+id/plain_try_these"
+            style="@style/header_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/try_these"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/daily_inspiration_recyclerview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/try_out_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:nestedScrollingEnabled="false"
+            android:visibility="invisible"
+            android:layout_marginEnd="@dimen/_4sdp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/plain_try_these"
+            app:spanCount="2"
+            android:layout_marginStart="@dimen/_2sdp"
+            tools:itemCount="2"
+            tools:listitem="@layout/mini_recipe_layout"
+            tools:visibility="visible" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/try_out_shimmer"
+            android:layout_width="match_parent"
+            tools:visibility="gone"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/_400sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/plain_try_these"
+            app:layout_constraintTop_toBottomOf="@+id/plain_try_these"
+            app:layout_constraintHorizontal_bias="0.0">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:columnCount="2">
+
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+                <include layout="@layout/shimmer_mini_recipe_layout"/>
+            </LinearLayout>
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+<!--        <com.google.android.material.progressindicator.CircularProgressIndicator-->
+<!--            android:id="@+id/try_out_progress_bar"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/_48sdp"-->
+<!--            android:indeterminate="true"-->
+<!--            app:indicatorColor="@color/grey_blue"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/try_out_recyclerview"-->
+<!--            app:layout_constraintStart_toStartOf="@id/try_out_recyclerview"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/plain_try_these"-->
+<!--            app:trackColor="@color/dark_orange" />-->
+
+        <TextView
+            android:id="@+id/try_out_no_network_here"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_48sdp"
+            android:fontFamily="@font/advent_pro_medium"
+            android:text="@string/wi_fi_is_not_available"
+            android:textSize="@dimen/_18ssp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/plain_try_these" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/discover_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/light_white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/discover_toolbar"
-        tools:itemCount="16"
-        tools:listitem="@layout/each_discover_item_layout" />
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/loading_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        app:indicatorColor="#D5D2D2"
-        app:indicatorSize="@dimen/_45sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:trackColor="@color/dark_blue"
-        app:trackThickness="@dimen/_4sdp" />
-
-    <ImageView
-        android:id="@+id/error_occurred_image"
-        android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_80sdp"
-        android:contentDescription="@string/no_network_available"
-        android:src="@drawable/no_network_available"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45"
-        tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/error_occurred_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30sdp"
-        android:layout_marginLeft="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginRight="@dimen/_20sdp"
-        android:fontFamily="@font/cabin_medium"
-        android:gravity="center_horizontal"
-        android:text="@string/check_network_connection_error"
-        android:textColor="@color/dark_black"
-        android:textSize="@dimen/_14ssp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_occurred_image"
-        tools:visibility="visible" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

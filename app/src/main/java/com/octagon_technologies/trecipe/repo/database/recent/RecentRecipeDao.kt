@@ -1,5 +1,6 @@
 package com.octagon_technologies.trecipe.repo.database.recent
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -9,8 +10,8 @@ interface RecentRecipeDao {
     suspend fun insertRecentRecipeEntity(recentRecipeEntity: RecentRecipeEntity)
 
     @Query("SELECT * FROM recentRecipeEntity")
-    suspend fun getAllRecentRecipe(): List<RecentRecipeEntity>
+    fun getAllRecentRecipe(): LiveData<List<RecentRecipeEntity>?>
 
-    @Delete
-    suspend fun deleteRecentRecipe(recentRecipeEntity: RecentRecipeEntity)
+    @Query("DELETE FROM recentRecipeEntity")
+    suspend fun clearRecentRecipes()
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:id="@+id/search_name"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/abeezee"
+    android:paddingStart="@dimen/_12sdp"
+    android:paddingTop="@dimen/_2sdp"
+    android:layout_marginEnd="@dimen/_4sdp"
+    android:paddingEnd="@dimen/_12sdp"
+    android:paddingBottom="@dimen/_2sdp"
+    android:textAllCaps="false"
+    android:textSize="@dimen/_10ssp"
+    app:backgroundTint="@color/grey_blue"
+    app:cornerRadius="120dp"
+    tools:text="American" />

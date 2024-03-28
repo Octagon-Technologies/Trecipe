@@ -3,7 +3,7 @@
 
     <color name="light_grey">#807D7D</color>
     <color name="light_black">#403E3E</color>
-    <color name="light_white">#fcfcfc</color>
+<!--    <color name="light_white">#fcfcfc</color>-->
     <color name="light_green">#64FB06</color>
     <color name="light_blue">#47AAF4</color>
 
@@ -14,4 +14,15 @@
     <color name="light_purple">#a3b6e9</color>
     <color name="purple">#8a9adc</color>
     <color name="dark_purple">#717ecf</color>
+
+    <color name="bottom_nav_inactive">#90C5EC</color>
+
+
+    <color name="shimmerColor">#C2C2C2</color>
+
+<!--    New color res-->
+    <color name="theme_blue">#0B3C4A</color>
+    <color name="grey_blue">#324652</color>
+    <color name="transparent_black">#80000000</color>
+    <color name="light_white">#C8C8C8</color>
 </resources>

@@ -11,8 +11,8 @@
 <!--        tools:targetApi="m" />-->
 
     <item
-        android:width="@dimen/splash_screen_icon_size"
-        android:height="@dimen/splash_screen_icon_size"
+        android:width="@dimen/_80sdp"
+        android:height="@dimen/_80sdp"
         android:drawable="@mipmap/app_icon"
         android:gravity="center"
         tools:ignore="UnusedAttribute" />

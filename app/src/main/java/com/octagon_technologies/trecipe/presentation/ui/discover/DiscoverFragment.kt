@@ -1,128 +1,222 @@
 package com.octagon_technologies.trecipe.presentation.ui.discover
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentDiscoverBinding
-import com.octagon_technologies.trecipe.models.State
-import com.octagon_technologies.trecipe.presentation.ui.discover.each_discover_item.EachDiscoverItemGroup
-import com.octagon_technologies.trecipe.repo.network.models.random_recipes.RandomRecipe
-import com.octagon_technologies.trecipe.utils.BottomNavUtils
-import com.octagon_technologies.trecipe.utils.SelectedRecipeUtils
+import com.octagon_technologies.trecipe.domain.Resource
+import com.octagon_technologies.trecipe.domain.discover.DiscoverRecipe
+import com.octagon_technologies.trecipe.presentation.ui.discover.large_discover_card.LargeRecipeGroup
+import com.octagon_technologies.trecipe.presentation.ui.recipe.similar_recipe.MiniRecipeGroup
+import com.octagon_technologies.trecipe.repo.dto.toSimilarRecipe
+import com.octagon_technologies.trecipe.utils.showShortSnackBar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class DiscoverFragment : Fragment() {
+class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
-    @Inject
-    lateinit var selectedRecipeUtils: SelectedRecipeUtils
-    private val recipesInRecyclerView = ArrayList<RandomRecipe>()
-    private var isLoading = false
-
-    private val viewModel: DiscoverViewModel by viewModels()
-
-    //    private val adHelper by adHelpers()
-    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
     private lateinit var binding: FragmentDiscoverBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentDiscoverBinding.inflate(inflater)
-        return binding.root
-    }
+    private val viewModel by viewModels<DiscoverViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.discoverRecyclerview.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = groupAdapter
-        }
+        binding = FragmentDiscoverBinding.bind(view)
 
-        setUpRecyclerViewScrollListener()
-        setUpClickListeners()
-        handleStateChanges()
-        selectedRecipeUtils.handleSelectedStateChanges(this)
+        setUpDiscoverShimmerAndTab()
+        setUpTryOutShimmerAndTab()
 
-        viewModel.listOfRandomRecipe.observe(viewLifecycleOwner) { listOfRecipe ->
-            Timber.i("listOfRecipe observed.")
-            loadRecipesIntoRecyclerView(listOfRecipe)
-            isLoading = false
-        }
+//        handleStateChanges()
+    }
 
-        selectedRecipeUtils.selectedRecipe.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                DiscoverFragmentDirections.actionNavigationDiscoverToRecipeFragment(it
-                    ?: return@observe)
-            )
-            selectedRecipeUtils.resetSelectedRecipe()
+//    private fun handleStateChanges() {
+//        viewModel.state.setUpSnackBars(this)
+//
+//        viewModel.state.observe(viewLifecycleOwner) { state ->
+//            when (state ?: return@observe) {
+//                State.Loading -> {}
+//
+//                // Show the recyclerview since we have the results
+//                State.Done -> {
+//                    binding.dailyInspirationRecyclerview.visibility = View.VISIBLE
+//                    binding.tryOutRecyclerview.visibility = View.VISIBLE
+//                    binding.dailyProgressBar.visibility = View.GONE
+//                    binding.tryOutProgressBar.visibility = View.GONE
+//                }
+//
+//                // In case of any errors, show the user an error message if we have no data in our DB
+//                else -> {
+//                    if (viewModel.canShowError.value == true) {
+//                        if (state == State.ApiError || state == State.NoNetworkError) showError()
+//                    } else
+//                        showRecyclerViewWithData()
+//                }
+//            }
+//        }
+//    }
 
+    /**
+     * The shimmer is automatically started { the visibility is already View.VISIBLE from XML }
+     *
+     * Once the data has been fetched and displayed, we can stop and hide the shimmer and make
+     * the recyclerview visible
+     */
+    private fun setUpDiscoverShimmerAndTab() {
+        val shimmer = binding.dailyInspirationShimmer
+        shimmer.startShimmer()
+
+        val groupAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.dailyInspirationRecyclerview.adapter = groupAdapter
+
+        viewModel.dailyRecipesResult.observe(viewLifecycleOwner) { result ->
+            if (result is Resource.Success || result.data != null) {
+                Timber.d("viewModel.dailyRecipesResult is ${result.data}")
+                if (result.data != null) {
+                    groupAdapter.addAll(transformDiscoverRecipes(result.data))
+                    shimmer.stopShimmer()
+                    shimmer.visibility = View.GONE
+
+                    binding.dailyInspirationRecyclerview.visibility = View.VISIBLE
+                }
+            }
+
+            if (result is Resource.Error)
+                showShortSnackBar(result.resMessage)
         }
     }
 
-    private fun handleStateChanges() {
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it ?: return@observe) {
-                State.Empty -> {
-                    hideLoadingBarAndShowError()
-                    binding.errorOccurredImage.setImageResource(R.drawable.empty_inbox)
-                    binding.errorOccurredDescription.text = getString(R.string.no_recipe_found)
+    private fun transformDiscoverRecipes(discoverRecipes: List<DiscoverRecipe>): List<LargeRecipeGroup> =
+        discoverRecipes.map { discoverRecipe ->
+            LargeRecipeGroup(
+                discoverRecipe = discoverRecipe,
+                isSaved = viewModel.isSaved(discoverRecipe),
+                saveOrUnsaveRecipe = { viewModel.saveOrUnSaveRecipe(discoverRecipe) },
+                openRecipe = {
+                    findNavController().navigate(
+                        DiscoverFragmentDirections.actionDiscoverFragmentToRecipeFragment(
+                            discoverRecipe.recipeId
+                        )
+                    )
                 }
-                State.Loading -> {
-                }
-                State.Done -> {
-                    binding.discoverRecyclerview.visibility = View.VISIBLE
-                    binding.loadingProgressBar.visibility = View.GONE
-                }
-                else -> {
-                    hideLoadingBarAndShowError()
+            )
+        }
+
+
+    /**
+     * The shimmer is automatically started { the visibility is already View.VISIBLE from XML }
+     *
+     * Once the data has been fetched and displayed, we can stop and hide the shimmer and make
+     * the recyclerview visible
+     */
+    private fun setUpTryOutShimmerAndTab() {
+        val shimmer = binding.tryOutShimmer
+        shimmer.startShimmer()
+
+        var isLoading = false
+
+        binding.root.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            val nestedScrollView = checkNotNull(v) {
+                return@setOnScrollChangeListener
+            }
+
+            val lastChild = nestedScrollView.getChildAt(nestedScrollView.childCount - 1)
+
+            if (lastChild != null) {
+                if ((scrollY >= (lastChild.measuredHeight - nestedScrollView.measuredHeight)) && scrollY > oldScrollY && !isLoading) {
+                    //get more items
+                    isLoading = true
+                    viewModel.fetchTryOutRecipes()
+                    isLoading = false
                 }
             }
         }
-    }
 
-    private fun hideLoadingBarAndShowError() {
-        binding.errorOccurredImage.visibility = View.VISIBLE
-        binding.errorOccurredDescription.visibility = View.VISIBLE
-        binding.loadingProgressBar.visibility = View.GONE
-    }
+        val groupAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.tryOutRecyclerview.adapter = groupAdapter
 
-    private fun loadRecipesIntoRecyclerView(listOfRandomRecipe: List<RandomRecipe>?) {
-        val diffList = listOfRandomRecipe?.filter { it !in recipesInRecyclerView }
-        Timber.d("diffList.size is ${diffList?.size}")
+        /**
+         * The network call might be successful hence Resource.Success
+         *    OR
+         * We have some data cached in the DB hence the network call might fail but we can still
+         * present some data
+         */
+        viewModel.tryRecipesResult.observe(viewLifecycleOwner) { result ->
+            if (result is Resource.Success || result.data != null) {
+                Timber.d("viewModel.tryRecipesResult is ${result.data}")
+                if (result.data != null) {
+                    groupAdapter.addAll(transformTryOutRecipes(result.data))
+                    shimmer.stopShimmer()
+                    shimmer.visibility = View.GONE
 
-        diffList?.forEach {
-            recipesInRecyclerView.add(it)
-            val eachDiscoverItemGroup = EachDiscoverItemGroup(it) { clickRecipe ->
-                selectedRecipeUtils.getSelectedRecipeFromRecipe(clickRecipe.id)
+                    binding.tryOutRecyclerview.visibility = View.VISIBLE
+                }
             }
 
-            groupAdapter.add(eachDiscoverItemGroup)
+            if (result is Resource.Error)
+                showShortSnackBar(result.resMessage)
         }
+
+//        val adapter = TryOutPagingAdapter(
+//            openRecipe = { recipeId ->
+//                findNavController().navigate(
+//                    DiscoverFragmentDirections
+//                        .actionDiscoverFragmentToRecipeFragment(recipeId)
+//                )
+//            },
+//            saveOrUnsaveRecipe = {  discoverRecipe ->
+//                viewModel.saveOrUnSaveRecipe(discoverRecipe)
+//            }
+//        )
+//
+//        binding.tryOutRecyclerview.adapter = adapter
+//
+//        adapter.addLoadStateListener {  loadStates ->
+//            Timber.d("loadStates.prepend is ${loadStates.prepend}")
+//            Timber.d("loadStates.append is ${loadStates.append}")
+//            Timber.d("loadStates.refresh is ${loadStates.refresh}")
+//        }
+
+//        viewModel.tryOutPagingData.observe(viewLifecycleOwner) { pagingRecipes ->
+//            Timber.d("viewModel.tryRecipesResult is $pagingRecipes")
+//
+//            if (pagingRecipes != null) {
+//                adapter.submitData(lifecycle, pagingRecipes)
+//
+//                if (shimmer.isShimmerVisible) {
+//                    shimmer.stopShimmer()
+//                    shimmer.visibility = View.GONE
+//                }
+//                binding.tryOutRecyclerview.visibility = View.VISIBLE
+//            }
+//        }
     }
 
-    private fun setUpClickListeners() {
-        binding.searchForRecipesBtn.setOnClickListener {
-            findNavController().navigate(
-                DiscoverFragmentDirections.actionNavigationDiscoverToSearchFragment()
+    private fun transformTryOutRecipes(tryOutRecipes: List<DiscoverRecipe>) =
+        tryOutRecipes.map { discoverRecipe ->
+            MiniRecipeGroup(
+                similarRecipe = discoverRecipe.toSimilarRecipe(),
+                isSaved = viewModel.isSaved(discoverRecipe),
+                openRecipe = {
+                    findNavController().navigate(
+                        DiscoverFragmentDirections.actionDiscoverFragmentToRecipeFragment(
+                            discoverRecipe.recipeId
+                        )
+                    )
+                },
+                saveOrUnsaveRecipe = { viewModel.saveOrUnSaveRecipe(discoverRecipe) }
             )
         }
-    }
+}
 
-    private fun setUpRecyclerViewScrollListener() {
+/*
+TODO: Add recyclerview tracking for loading more recipes when it reaches close to the end
+
         binding.discoverRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -152,5 +246,5 @@ class DiscoverFragment : Fragment() {
                     BottomNavUtils.showBottomNavView(activity)
             }
         })
-    }
-}
+
+ */

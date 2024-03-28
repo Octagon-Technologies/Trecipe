@@ -12,8 +12,37 @@
     <string name="no_recipe_found">No recipes found</string>
     <string name="api_limit_exceeded">Api limit exceeded. Try again in an hour. Sorry for the inconvenience</string>
 
+    <string name="sample_recipe_summary">Need a <b>lacto ovo vegetarian side dish</b>? Apple Brown Betty could be an awesome recipe to try. One portion of this dish contains approximately <b>9g of protein</b>, <b>23g of fat</b>, and a total of <b>657 calories</b>. This recipe serves 6 and costs $1.5 per serving. 9 people have made this recipe and would make it again. This recipe from Foodista requires butter, apples, butter, and butter. From preparation to the plate, this recipe takes roughly <b>45 minutes</b>. With a spoonacular <b>score of 24%</b>, this dish is rather bad. Users who liked this recipe also liked <a href="https://spoonacular.com/recipes/apple-brown-betty-369603\">Apple Brown Betty</a>, <a href="https://spoonacular.com/recipes/apple-brown-betty-185298\">Apple Brown Betty</a>, and <a href="https://spoonacular.com/recipes/apple-brown-betty-1041697\">Apple Brown Betty</a>
+    </string>
+
     <string name="no_recently_viewed_recipes_available">No recently viewed recipes available. Whenever you open a recipe, it will be added here.</string>
     <string name="no_liked_recipes_available">No liked recipes available. Whenever you like a recipe, it will be added here.</string>
     <string name="no_download_recipes_available">No downloaded recipes available. Whenever you download a recipe, it will be added here.</string>
+    <string name="recipe_caps">RECIPE</string>
+    <string name="total_time">Total Time</string>
+    <string name="nutrition_per_serving">Nutrition Per Serving</string>
+    <string name="view_all_caps">VIEW ALL</string>
+    <string name="calories_caps">CALORIES</string>
+    <string name="fat_caps">FAT</string>
+    <string name="protein_caps">PROTEIN</string>
+    <string name="directions">Directions</string>
+    <string name="dots">........................................................................................................................................................................................................................................................................................................................................................................</string>
+    <string name="you_might_also_like">You Might Also Like…</string>
+    <string name="search_here">Search Here</string>
+    <string name="recent">Recent</string>
+    <string name="liked">Liked</string>
+    <string name="saved">Saved</string>
+    <string name="no_recipes_here">No recipes here :(</string>
+    <string name="daily_inspiration">Daily Inspiration</string>
+    <string name="try_these">Try these</string>
+    <string name="wi_fi_is_not_available">WI-FI is not available</string>
+    <string name="discover">Discover</string>
+    <string name="my_recipes">My Recipes</string>
+    <string name="search">Search</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="metric">METRIC</string>
+    <string name="us">US</string>
+    <string name="plain_slash">/</string>
 
+    <string name="each_nutrition">%f %s</string>
 </resources>

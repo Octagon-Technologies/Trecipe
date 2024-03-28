@@ -2,19 +2,16 @@ package com.octagon_technologies.trecipe.presentation.ui.search
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentSearchBinding
-import com.octagon_technologies.trecipe.models.State
-import com.octagon_technologies.trecipe.presentation.ui.search.each_search_item.EachSearchItem
-import com.octagon_technologies.trecipe.repo.network.models.suggestions.RecipeSuggestion
+import com.octagon_technologies.trecipe.domain.State
+import com.octagon_technologies.trecipe.presentation.ui.search.autocomplete_group.AutoCompleteGroup
+import com.octagon_technologies.trecipe.presentation.ui.search.recent_tab.RecentTabGroup
 import com.octagon_technologies.trecipe.utils.KeyboardUtils
 import com.octagon_technologies.trecipe.utils.ResUtils
 import com.xwray.groupie.GroupAdapter
@@ -23,80 +20,110 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModels()
-    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentSearchBinding.inflate(inflater).also {
-            it.lifecycleOwner = viewLifecycleOwner
-            it.viewModel = viewModel
-        }
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentSearchBinding.bind(view)
 
+        setUpRecyclerView()
+        setUpNavigateToResults()
         setUpTextWatcher()
         setUpClickListener()
         handleStateChanges()
+    }
 
-        binding.searchRecyclerview.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = groupAdapter
-        }
-
-        viewModel.recipeSuggestions.observe(viewLifecycleOwner) { recipeSuggestions ->
-            groupAdapter.clear()
-            Timber.d("recipeSuggestions.size is ${recipeSuggestions.size}")
-            recipeSuggestions?.forEach { addSuggestionToAdapter(it) }
+    private fun setUpNavigateToResults() {
+        // Once we've saved the query to the DB, we can navigate to the results page
+        viewModel.navigateToSearchResults.observe(viewLifecycleOwner) { searchQuery ->
+            if (searchQuery != null) {
+                findNavController().navigate(
+                    SearchFragmentDirections
+                        .actionSearchFragmentToSearchResultsFragment(searchQuery)
+                )
+                viewModel.resetNavigateToSearchResults()
+            }
         }
     }
 
-    private fun addSuggestionToAdapter(recipeSuggestion: RecipeSuggestion) {
-        val eachSearchItem = EachSearchItem(recipeSuggestion) { onClickRecipeSuggestion ->
-            binding.searchInput.setText(onClickRecipeSuggestion.title)
-            val query = binding.searchInput.text.toString()
+    private fun setUpRecyclerView() {
+        setUpRecentAutoComplete()
+        setUpAutoCompleteRecyclerView()
+    }
 
-            findNavController().navigate(
-                SearchFragmentDirections
-                    .actionSearchFragmentToSearchResultsFragment(onClickRecipeSuggestion, query)
-            )
+    private fun setUpRecentAutoComplete() {
+        val recentSearchGroupAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.recentSearchRecyclerview.adapter = recentSearchGroupAdapter
+
+        viewModel.listOfRecentAutoComplete.observe(viewLifecycleOwner) { listOfRecentAutoComplete ->
+            if (listOfRecentAutoComplete == null) {
+                binding.recentLayout.visibility = View.GONE
+            } else {
+                binding.recentLayout.visibility = View.VISIBLE
+
+                val listOfRecentTabGroup = listOfRecentAutoComplete.map { autoComplete ->
+                    RecentTabGroup(
+                        recentAutoComplete = autoComplete,
+                        onRecentTabSelected = { viewModel.addQueryToRecent(autoComplete) }
+                    )
+                }
+
+                recentSearchGroupAdapter.addAll(listOfRecentTabGroup)
+            }
         }
+    }
 
-        groupAdapter.add(eachSearchItem)
+    private fun setUpAutoCompleteRecyclerView() {
+        val autoCompleteGroupAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.searchRecyclerview.adapter = autoCompleteGroupAdapter
+
+        viewModel.recipeSuggestions.observe(viewLifecycleOwner) { recipeSuggestions ->
+            autoCompleteGroupAdapter.clear()
+            Timber.d("recipeSuggestions.size is ${recipeSuggestions.size}")
+
+            val listOfAutoCompleteGroup = recipeSuggestions?.map { autoComplete ->
+                AutoCompleteGroup(autoComplete = autoComplete, onClick = {
+
+                    binding.searchInput.setText(autoComplete.name)
+                    viewModel.addQueryToRecent(autoComplete)
+
+                })
+            } ?: return@observe
+
+            Timber.d("listOfAutoCompleteGroup.size is ${listOfAutoCompleteGroup.size}")
+            autoCompleteGroupAdapter.addAll(listOfAutoCompleteGroup)
+        }
     }
 
     private fun handleStateChanges() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it ?: return@observe) {
-                State.Loading -> {
-                }
+                State.Loading -> {}
                 State.Done -> {
                     hideErrorImage()
                     binding.searchRecyclerview.visibility = View.VISIBLE
                 }
+
                 State.Empty -> {
                     showErrorImage()
-                    binding.errorOccurredImage.setImageResource(R.drawable.empty_inbox)
-                    binding.errorOccurredDescription.text = ResUtils.getResString(context, R.string.no_recipes_found_for_search_query)
+                    binding.errorOccurredImage.setImageResource(R.drawable.inbox_24)
+                    binding.errorOccurredDescription.text =
+                        ResUtils.getResString(context, R.string.no_recipes_found_for_search_query)
                 }
+
                 else -> showErrorImage()
             }
         }
     }
 
-    fun showErrorImage() {
+    private fun showErrorImage() {
         binding.errorOccurredImage.visibility = View.VISIBLE
         binding.errorOccurredDescription.visibility = View.VISIBLE
     }
-    fun hideErrorImage() {
+
+    private fun hideErrorImage() {
         binding.errorOccurredImage.visibility = View.GONE
         binding.errorOccurredDescription.visibility = View.GONE
     }

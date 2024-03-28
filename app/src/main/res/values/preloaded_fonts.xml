@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/abeezee</item>
+        <item>@font/actor</item>
         <item>@font/advent_pro</item>
         <item>@font/advent_pro_medium</item>
+        <item>@font/alatsi</item>
+        <item>@font/allan</item>
         <item>@font/cabin</item>
         <item>@font/cabin_bold</item>
         <item>@font/cabin_medium</item>
+        <item>@font/montserrat_alternates_bold</item>
     </array>
 </resources>

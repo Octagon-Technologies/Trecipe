@@ -1,11 +1,9 @@
 package com.octagon_technologies.trecipe.di
 
 //import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.octagon_technologies.trecipe.repo.database.LocalRecipeRepo
+import com.octagon_technologies.trecipe.repo.database.discover.try_out.TryOutRecipeDao
 import com.octagon_technologies.trecipe.repo.network.RecipeApi
-import com.octagon_technologies.trecipe.repo.network.RemoteRecipeRepo
 import com.octagon_technologies.trecipe.utils.Constants
-import com.octagon_technologies.trecipe.utils.SelectedRecipeUtils
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -16,15 +14,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
-
-    @Provides
-    fun providesSelectedRecipeUtils(remoteRecipeRepo: RemoteRecipeRepo) =
-        SelectedRecipeUtils(remoteRecipeRepo)
 
     @Provides
     @Singleton
@@ -44,14 +39,10 @@ object NetworkModule {
         .client(okHttpClient)
         .build()
 
+
     @Provides
-    @Singleton
-    fun providesRemoteRecipeRepo(
-        retrofit: Retrofit,
-        localRecipeRepo: LocalRecipeRepo
-    ): RemoteRecipeRepo {
-        val recipeApi = retrofit.create(RecipeApi::class.java)
-        return RemoteRecipeRepo(localRecipeRepo, recipeApi)
-    }
+    fun providesRecipeApi(retrofit: Retrofit) =
+        retrofit.create<RecipeApi>()
+
 
 }
