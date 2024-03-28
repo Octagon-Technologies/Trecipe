@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/_6sdp"
+    android:paddingBottom="@dimen/_6sdp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ingredient_image"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_36sdp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/isolated_egg" />
+
+    <TextView
+        android:id="@+id/ingredient_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1/2 cup"
+        android:textSize="@dimen/_13ssp"
+        android:fontFamily="@font/advent_pro"
+        app:layout_constraintBottom_toBottomOf="@+id/ingredient_image"
+        app:layout_constraintEnd_toStartOf="@+id/ingredient_name"
+        app:layout_constraintStart_toEndOf="@+id/ingredient_image"
+        app:layout_constraintTop_toTopOf="@+id/ingredient_image" />
+
+    <TextView
+        android:id="@+id/ingredient_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_100sdp"
+        android:fontFamily="@font/advent_pro_medium"
+        tools:text="Fresh Thyme Leaves"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/ingredient_amount"
+        app:layout_constraintEnd_toStartOf="@+id/explore_ingredient"
+        app:layout_constraintStart_toEndOf="@+id/ingredient_image"
+        app:layout_constraintTop_toTopOf="@+id/ingredient_amount" />
+
+    <ImageView
+        android:id="@+id/explore_ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_right_24"
+        android:padding="@dimen/_4sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/ingredient_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ingredient_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

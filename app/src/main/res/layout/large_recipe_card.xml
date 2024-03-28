@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/large_recipe_card_layout"
+    android:layout_width="@dimen/_230sdp"
+    android:layout_height="@dimen/_325sdp"
+    android:layout_marginEnd="@dimen/_6sdp"
+    android:layout_marginBottom="@dimen/_12sdp"
+    android:background="@color/theme_blue"
+    app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize4Percent"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_blue"
+        android:paddingBottom="@dimen/_12sdp"
+        android:theme="@style/Theme.Trecipe.TransparentBackground">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/large_recipe_image"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_230sdp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize4Percent"
+            tools:src="@drawable/sample_food" />
+
+        <TextView
+            android:id="@+id/large_recipe_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:ellipsize="end"
+            android:fontFamily="@font/advent_pro_medium"
+            android:maxLines="2"
+            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/large_recipe_rating"
+            tools:text="Homemade Broccoli Cheddar Soup With Carrots Inside" />
+
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/large_recipe_rating"
+            style="@style/Widget.MaterialRatingBar.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:isIndicator="true"
+            android:rating="3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/large_recipe_image"
+            app:mrb_progressTint="@color/dark_orange"
+            app:mrb_secondaryProgressTint="@color/dark_orange" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            app:cardCornerRadius="25dp"
+            android:padding="@dimen/_4sdp"
+            app:cardBackgroundColor="#730B3C4A"
+            android:paddingStart="@dimen/_6sdp"
+            app:strokeWidth="0dp"
+            android:paddingEnd="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/large_recipe_image"
+            app:layout_constraintStart_toStartOf="@+id/large_recipe_image">
+
+        <TextView
+            android:id="@+id/large_recipe_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_4sdp"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/cabin_bold"
+            android:textColor="@android:color/white"
+            tools:text="1hr 20min" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/save_btn"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            app:contentPadding="@dimen/_5sdp"
+            android:background="@color/transparent_black"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:srcCompat="@drawable/save_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/large_recipe_summary"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:ellipsize="end"
+            android:fontFamily="@font/cabin"
+            android:textSize="@dimen/_10ssp"
+            android:maxLines="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/large_recipe_name"
+            app:layout_constraintStart_toStartOf="@+id/large_recipe_name"
+            app:layout_constraintTop_toBottomOf="@+id/large_recipe_name"
+            tools:text="@string/sample_recipe_summary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

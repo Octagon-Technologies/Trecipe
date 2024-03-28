@@ -4,41 +4,56 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.octagon_technologies.trecipe.models.State
-import com.octagon_technologies.trecipe.repo.network.RemoteRecipeRepo
-import com.octagon_technologies.trecipe.repo.network.models.random_recipes.RandomRecipe
+import com.octagon_technologies.trecipe.domain.Resource
+import com.octagon_technologies.trecipe.domain.discover.DiscoverRecipe
+import com.octagon_technologies.trecipe.repo.LocalRecipeRepo
+import com.octagon_technologies.trecipe.repo.RecipeRepo
+import com.octagon_technologies.trecipe.repo.dto.toSimpleRecipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val remoteRecipeRepo: RemoteRecipeRepo,
+    private val recipeRepo: RecipeRepo,
+    private val localRecipeRepo: LocalRecipeRepo
 ) : ViewModel() {
-    private val _listOfRandomRecipes = MutableLiveData<List<RandomRecipe>>()
-    val listOfRandomRecipe: LiveData<List<RandomRecipe>> = _listOfRandomRecipes
 
-    private val _state = MutableLiveData(State.Loading)
-    val state: LiveData<State> = _state
+    private val _dailyRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>()
+    val dailyRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _dailyRecipesResult
+
+    private val _tryRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>()
+    val tryRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _tryRecipesResult
+
+
+//    val tryOutPagingData: LiveData<PagingData<DiscoverRecipe>> = Pager(
+//        config = PagingConfig(pageSize = 15, maxSize = 60),
+//        pagingSourceFactory = { TryOutRecipesPagingSource(tryOutRecipesRepo, localRecipeRepo) }
+//    ).liveData
+
 
     init {
-        loadData()
-    }
-
-    fun loadData() {
         viewModelScope.launch {
-            remoteRecipeRepo.getRandomRecipes(_state).collect {
-                _listOfRandomRecipes.value = it?.distinct()
+            _dailyRecipesResult.value = Resource.Loading()
+            _tryRecipesResult.value = Resource.Loading()
 
-                // Check if the state is already done to avoid reassigning State.Done to _state.value
-                // and if recipe list is empty then assign State.Empty
-                if (_state.value != State.Done)
-                    _state.value = State.Done
-                else if (it?.isEmpty() == true)
-                    _state.value = State.Empty
-            }
+            fetchDailyRecipes()
+            fetchTryOutRecipes()
         }
     }
+
+    private fun fetchDailyRecipes() =
+        viewModelScope.launch { _dailyRecipesResult.value = recipeRepo.getDiscoverRecipes() }
+    fun fetchTryOutRecipes() =
+        viewModelScope.launch { _tryRecipesResult.value = recipeRepo.getTryOutRecipes() }
+
+    fun isSaved(discoverRecipe: DiscoverRecipe) =
+        localRecipeRepo.isSaved(discoverRecipe.recipeId)
+
+    fun saveOrUnSaveRecipe(discoverRecipe: DiscoverRecipe) =
+        viewModelScope.launch {
+            localRecipeRepo.saveOrUnSaveRecipe(discoverRecipe.toSimpleRecipe())
+        }
 
 
 }

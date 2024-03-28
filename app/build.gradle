@@ -1,23 +1,25 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'androidx.navigation.safeargs'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+//    id 'com.google.devtools.ksp' // version '1.8.10-1.0.9'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs'
+}
 
 android {
     def major_release = 1
-    def default_release = 1
-    def minor_release = 3
+    def default_release = 0
+    def minor_release = 0
 
     compileSdk(34)
-    buildToolsVersion = "29.0.3"
 
     defaultConfig {
         applicationId "com.octagon_technologies.trecipe"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode ((major_release * 100) + (default_release * 10) + minor_release)
+        versionCode((major_release * 100) + (default_release * 10) + minor_release)
         versionName "$major_release.$default_release.$minor_release"
 
         vectorDrawables.useSupportLibrary = true
@@ -51,7 +53,10 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding true
+        buildConfig true
     }
+
+    namespace 'com.octagon_technologies.trecipe'
 }
 
 dependencies {
@@ -66,14 +71,22 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.11.0'
 
+
+    // Paging Library
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+
+    // Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // KSP
+//    implementation "com.google.devtools.ksp:symbol-processing-api:1.9.20-1.0.14"
+
     // Coordinator Layout
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
 
-    // Google Android
-    implementation "com.google.android.gms:play-services-location:21.1.0"
-
     // Dexter
     implementation "com.karumi:dexter:6.2.2"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
 
     // Test dependencies
     testImplementation 'junit:junit:4.13.2'
@@ -140,6 +153,9 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
+    // Star rating
+    implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
+
     // Okhttp Logging Interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
@@ -154,7 +170,7 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.1.0-alpha02"
 
     // Ads
-    implementation 'com.google.android.gms:play-services-ads:22.6.0'
+//    implementation 'com.google.android.gms:play-services-ads:22.6.0'
 }
 
 kapt {

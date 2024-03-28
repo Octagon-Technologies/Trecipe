@@ -2,10 +2,10 @@ package com.octagon_technologies.trecipe.repo.database
 
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.octagon_technologies.trecipe.models.BasicRoomRecipe
+import com.octagon_technologies.trecipe.domain.discover.DiscoverRecipe
+import com.octagon_technologies.trecipe.domain.recipe.RecipeDetails
+import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 import com.octagon_technologies.trecipe.repo.network.models.instructions.RecipeInstruction
-import com.octagon_technologies.trecipe.repo.network.models.random_recipes.RandomRecipe
-import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.SelectedRecipe
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -15,57 +15,57 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 class RecipeTypeConverters {
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
-    private val basicRoomJsonAdapter: JsonAdapter<BasicRoomRecipe> =
-        moshi.adapter(BasicRoomRecipe::class.java)
+    private val recipeDetailsJsonAdapter: JsonAdapter<RecipeDetails> =
+        moshi.adapter(RecipeDetails::class.java)
 
-    private val selectedRecipeJsonAdapter: JsonAdapter<SelectedRecipe> =
-        moshi.adapter(SelectedRecipe::class.java)
-
-    private val randomRandomRecipeJsonAdapter: JsonAdapter<List<RandomRecipe>> =
-        moshi.adapter(Types.newParameterizedType(List::class.java, RandomRecipe::class.java))
-
-    private val listOfRecipeInstructionJsonAdapter: JsonAdapter<List<RecipeInstruction>> =
-        moshi.adapter(Types.newParameterizedType(List::class.java, RecipeInstruction::class.java))
-
-    private val recipeInstructionJsonAdapter =
-        moshi.adapter(RecipeInstruction::class.java)
+    private val simpleRecipeJsonAdapter: JsonAdapter<SimpleRecipe> =
+        moshi.adapter(SimpleRecipe::class.java)
 
 
-    @TypeConverter
-    fun basicRoomRecipeToString(basicRoomRecipe: BasicRoomRecipe): String =
-        basicRoomJsonAdapter.toJson(basicRoomRecipe)
+    private val discoverRecipeJsonAdapter: JsonAdapter<List<DiscoverRecipe>> =
+        moshi.adapter(Types.newParameterizedType(List::class.java, DiscoverRecipe::class.java))
 
-    @TypeConverter
-    fun stringToBasicRoomRecipe(data: String) =
-        basicRoomJsonAdapter.fromJson(data)
+//    private val listOfRecipeInstructionJsonAdapter: JsonAdapter<List<RecipeInstruction>> =
+//        moshi.adapter(Types.newParameterizedType(List::class.java, RecipeInstruction::class.java))
+//
+//    private val recipeInstructionJsonAdapter =
+//        moshi.adapter(RecipeInstruction::class.java)
 
 
     @TypeConverter
-    fun selectedRecipeToString(selectedRecipe: SelectedRecipe): String =
-        selectedRecipeJsonAdapter.toJson(selectedRecipe)
+    fun recipeDetailsToString(recipeDetails: RecipeDetails): String =
+        recipeDetailsJsonAdapter.toJson(recipeDetails)
 
     @TypeConverter
-    fun stringToSelectedRecipe(data: String) =
-        selectedRecipeJsonAdapter.fromJson(data)
+    fun stringToRecipeDetails(data: String) =
+        recipeDetailsJsonAdapter.fromJson(data)
+
+    @TypeConverter
+    fun simpleRecipeToString(simpleRecipe: SimpleRecipe): String =
+        simpleRecipeJsonAdapter.toJson(simpleRecipe)
+
+    @TypeConverter
+    fun stringToSimpleRecipe(data: String) =
+        simpleRecipeJsonAdapter.fromJson(data)
 
 
     @TypeConverter
-    fun listOfRandomRecipeToString(randomRandomRecipes: List<RandomRecipe>): String =
-        randomRandomRecipeJsonAdapter.toJson(randomRandomRecipes)
+    fun listOfDiscoverRecipeToString(recipeList: List<DiscoverRecipe>): String =
+        discoverRecipeJsonAdapter.toJson(recipeList)
 
     @TypeConverter
-    fun stringToListOfRandomRecipe(data: String) =
-        randomRandomRecipeJsonAdapter.fromJson(data)
+    fun stringToListOfDiscoverRecipe(data: String) =
+        discoverRecipeJsonAdapter.fromJson(data)
 
-    @TypeConverter
-    fun listOfRecipeInstructionToString(listOfRecipeInstruction: List<RecipeInstruction>): String =
-        listOfRecipeInstructionJsonAdapter.toJson(listOfRecipeInstruction)
-
-    @TypeConverter
-    fun stringToListOfRecipeInstruction(data: String) =
-        listOfRecipeInstructionJsonAdapter.fromJson(data)
-
-    @TypeConverter
-    fun stringToRecipeInstruction(data: String) =
-        recipeInstructionJsonAdapter.fromJson(data)
+//    @TypeConverter
+//    fun listOfRecipeInstructionToString(listOfRecipeInstruction: List<RecipeInstruction>): String =
+//        listOfRecipeInstructionJsonAdapter.toJson(listOfRecipeInstruction)
+//
+//    @TypeConverter
+//    fun stringToListOfRecipeInstruction(data: String) =
+//        listOfRecipeInstructionJsonAdapter.fromJson(data)
+//
+//    @TypeConverter
+//    fun stringToRecipeInstruction(data: String) =
+//        recipeInstructionJsonAdapter.fromJson(data)
 }

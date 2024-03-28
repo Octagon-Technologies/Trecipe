@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.ActivityMainBinding
-import com.octagon_technologies.trecipe.utils.ViewUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,8 +25,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navController = findNavController(R.id.nav_host_fragment)
-        ViewUtils.setupStatusBarAndNavigationBar(this)
+        val supportFragmentManager = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = supportFragmentManager.findNavController()
+//        ViewUtils.setupStatusBarAndNavigationBar(this)
 
         NavigationUI.setupWithNavController(binding.navView, navController)
     }

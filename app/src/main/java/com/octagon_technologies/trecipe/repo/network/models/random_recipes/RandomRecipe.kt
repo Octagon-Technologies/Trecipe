@@ -36,7 +36,7 @@ data class RandomRecipe(
     @Json(name = "healthScore")
     val healthScore: Double?,
     @Json(name = "id")
-    val id: Int?,
+    val id: Int,
     @Json(name = "image")
     val image: String?,
     @Json(name = "imageType")
@@ -56,7 +56,7 @@ data class RandomRecipe(
     @Json(name = "pricePerServing")
     val pricePerServing: Double?,
     @Json(name = "readyInMinutes")
-    val readyInMinutes: Int?,
+    val readyInMinutes: Int,
     @Json(name = "servings")
     val servings: Int?,
     @Json(name = "sourceName")
@@ -68,11 +68,11 @@ data class RandomRecipe(
     @Json(name = "spoonacularSourceUrl")
     val spoonacularSourceUrl: String?,
     @Json(name = "summary")
-    val summary: String?,
+    val summary: String,
     @Json(name = "sustainable")
     val sustainable: Boolean?,
     @Json(name = "title")
-    val title: String?,
+    val title: String,
     @Json(name = "vegan")
     val vegan: Boolean?,
     @Json(name = "vegetarian")

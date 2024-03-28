@@ -1,111 +1,81 @@
 package com.octagon_technologies.trecipe.presentation.ui.search_results
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentSearchResultsBinding
-import com.octagon_technologies.trecipe.models.State
-import com.octagon_technologies.trecipe.presentation.ui.search_results.search_result_item.SearchResultItem
-import com.octagon_technologies.trecipe.repo.network.models.complex_search.SearchResult
-import com.octagon_technologies.trecipe.repo.network.models.suggestions.RecipeSuggestion
+import com.octagon_technologies.trecipe.domain.State
+import com.octagon_technologies.trecipe.presentation.ui.search_results.search_result.SearchResultGroup
 import com.octagon_technologies.trecipe.utils.BottomNavUtils
 import com.octagon_technologies.trecipe.utils.ResUtils
-import com.octagon_technologies.trecipe.utils.SelectedRecipeUtils
-import com.octagon_technologies.trecipe.utils.ViewUtils
+import com.octagon_technologies.trecipe.utils.setUpSnackBars
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchResultsFragment : Fragment() {
-
-    @Inject
-    lateinit var selectedRecipeUtils: SelectedRecipeUtils
+class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
 
     private val viewModel: SearchResultsViewModel by viewModels()
-    private val args by navArgs<SearchResultsFragmentArgs>()
+    private val query by lazy { navArgs<SearchResultsFragmentArgs>().value.query }
+
     private lateinit var binding: FragmentSearchResultsBinding
-    private lateinit var recipeSuggestion: RecipeSuggestion
 
-    private val filterGroupAdapter = GroupAdapter<GroupieViewHolder>()
     private val searchResultsGroupAdapter = GroupAdapter<GroupieViewHolder>()
-
-    private val addedSearchResults = ArrayList<SearchResult>()
-    private var isLoading = false
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentSearchResultsBinding.inflate(inflater)
-        recipeSuggestion = args.recipeSuggestion
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated called")
-        binding.searchResultsInput.setText(args.query)
+        binding = FragmentSearchResultsBinding.bind(view)
+        binding.searchResultsInput.text = query
+        viewModel.loadComplexSearch(query)
 
+        setUpSearchResults()
         setUpClickListeners()
-        setUpRecyclerView()
-        setUpSearchRecyclerViewScrollListener()
+        setUpSearchRecyclerView()
         handleStateChanges()
-        selectedRecipeUtils.handleSelectedStateChanges(this)
+    }
 
-        recipeSuggestion.title?.let { viewModel.loadComplexSearch(it) }
-
-        // Get search results and reset loading
-        viewModel.complexSearch.observe(viewLifecycleOwner) { complexSearch ->
-            complexSearch?.searchResults
-                ?.also {
-                    isLoading = false
-                    if (it.isEmpty()) {
-                        handleEmptyResults()
+    private fun setUpSearchResults() {
+        viewModel.listOfSearchResult.observe(viewLifecycleOwner) { listOfSearchResult ->
+            val listOfSearchGroup = listOfSearchResult?.map { searchResult ->
+                SearchResultGroup(
+                    searchResult = searchResult,
+                    openRecipe = {
+                        findNavController().navigate(
+                            SearchResultsFragmentDirections
+                                .actionSearchResultsFragmentToRecipeFragment(searchResult.recipeId)
+                        )
                     }
-                }
-                ?.filter { it !in addedSearchResults }
-                ?.forEach {
-                    val searchResultItem = SearchResultItem(it) { onClickSearchResult ->
-                        selectedRecipeUtils.getSelectedRecipeFromRecipe(onClickSearchResult.id)
-                    }
+                )
+            } ?: return@observe
 
-                    addedSearchResults.add(it)
-                    searchResultsGroupAdapter.add(searchResultItem)
-                }
-        }
-
-        selectedRecipeUtils.selectedRecipe.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                SearchResultsFragmentDirections
-                    .actionSearchResultsFragmentToNavigationRecipeFragment(it ?: return@observe)
-            )
-            selectedRecipeUtils.resetSelectedRecipe()
+            searchResultsGroupAdapter.addAll(listOfSearchGroup)
         }
     }
 
     private fun handleStateChanges() {
+        viewModel.state.setUpSnackBars(this)
+
         viewModel.state.observe(viewLifecycleOwner) {
             when (it ?: return@observe) {
                 State.Empty -> handleEmptyResults()
-                State.Loading -> {
-                }
+                State.Loading -> {}
+
+                // Show the recyclerview since we have the search results
                 State.Done -> {
                     binding.searchResultsRecyclerView.visibility = View.VISIBLE
                     binding.loadingProgressBar.visibility = View.GONE
                 }
-                else -> hideLoadingBarAndShowError()
+
+                // In case of any errors, show the user
+                State.ApiError -> hideLoadingBarAndShowError()
+                State.NoNetworkError -> hideLoadingBarAndShowError()
             }
         }
     }
@@ -119,27 +89,21 @@ class SearchResultsFragment : Fragment() {
     private fun handleEmptyResults() {
         hideLoadingBarAndShowError()
 
-        binding.errorOccurredImage.setImageResource(R.drawable.empty_inbox)
+        binding.errorOccurredImage.setImageResource(R.drawable.inbox_24)
         binding.errorOccurredDescription.text =
             ResUtils.getResString(context, R.string.no_recipes_found_for_search_query)
     }
 
     private fun setUpClickListeners() {
         binding.searchResultsBackBtn.setOnClickListener {
-            findNavController().popBackStack(R.id.navigation_discover, false)
+            findNavController().popBackStack(R.id.discoverFragment, false)
         }
         binding.searchResultsInput.setOnClickListener { findNavController().popBackStack() }
     }
 
-    private fun setUpRecyclerView() {
-        binding.filterRecyclerView.also {
-            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            it.adapter = filterGroupAdapter
-        }
-        binding.searchResultsRecyclerView.also {
-            it.layoutManager = GridLayoutManager(context, 2)
-            it.adapter = searchResultsGroupAdapter
-        }
+    private fun setUpSearchRecyclerView() {
+        binding.searchResultsRecyclerView.adapter = searchResultsGroupAdapter
+        setUpSearchRecyclerViewScrollListener()
     }
 
     private fun setUpSearchRecyclerViewScrollListener() {
@@ -151,13 +115,8 @@ class SearchResultsFragment : Fragment() {
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
                     val gridLayoutManager = recyclerView.layoutManager as GridLayoutManager
                     val lastPosition = gridLayoutManager.findLastVisibleItemPosition()
-                    val searchResultsSize = addedSearchResults.size
-                    val diff = searchResultsSize - lastPosition
 
-                    if (diff < 8 && !isLoading) {
-                        viewModel.loadComplexSearch(recipeSuggestion.title ?: return)
-                        isLoading = true
-                    }
+                    viewModel.checkIfShouldReloadMore(query, lastPosition)
                 }
             }
 

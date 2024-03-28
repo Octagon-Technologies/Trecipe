@@ -1,170 +1,315 @@
 package com.octagon_technologies.trecipe.presentation.ui.recipe
 
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentRecipeBinding
-import com.octagon_technologies.trecipe.models.State
-import com.octagon_technologies.trecipe.presentation.ui.recipe.ingredients_item_group.IngredientItemGroup
-import com.octagon_technologies.trecipe.presentation.ui.recipe.prep_step_item_group.PreparationItemGroup
-import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.SelectedRecipe
-import com.octagon_technologies.trecipe.utils.BottomNavUtils
-import com.octagon_technologies.trecipe.utils.ResUtils
-import com.octagon_technologies.trecipe.utils.ViewUtils
+import com.octagon_technologies.trecipe.domain.Resource
+import com.octagon_technologies.trecipe.domain.recipe.Ingredient
+import com.octagon_technologies.trecipe.domain.recipe.RecipeDetails
+import com.octagon_technologies.trecipe.domain.recipe.toCalories
+import com.octagon_technologies.trecipe.domain.recipe.toCarbs
+import com.octagon_technologies.trecipe.domain.recipe.toFat
+import com.octagon_technologies.trecipe.domain.recipe.toProtein
+import com.octagon_technologies.trecipe.domain.recipe.toRecipeAuthor
+import com.octagon_technologies.trecipe.domain.recipe.toRecipeName
+import com.octagon_technologies.trecipe.domain.recipe.toRecipeRating
+import com.octagon_technologies.trecipe.domain.recipe.toRecipeSummary
+import com.octagon_technologies.trecipe.domain.recipe.toRecipeTime
+import com.octagon_technologies.trecipe.domain.similar_recipe.SimilarRecipe
+import com.octagon_technologies.trecipe.presentation.ui.recipe.ingredient.IngredientGroup
+import com.octagon_technologies.trecipe.presentation.ui.recipe.similar_recipe.MiniRecipeGroup
+import com.octagon_technologies.trecipe.presentation.ui.recipe.step.StepGroup
+import com.octagon_technologies.trecipe.utils.fromHtml
+import com.octagon_technologies.trecipe.utils.getResColorStateList
+import com.octagon_technologies.trecipe.utils.loadImage
+import com.octagon_technologies.trecipe.utils.showShortSnackBar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RecipeFragment : Fragment() {
-
-    private val ingredientsGroupAdapter = GroupAdapter<GroupieViewHolder>()
-    private val preparationGroupAdapter = GroupAdapter<GroupieViewHolder>()
-    private val viewModel: RecipeViewModel by viewModels()
-    private val args: RecipeFragmentArgs by navArgs()
+class RecipeFragment : Fragment(R.layout.fragment_recipe) {
 
     private lateinit var binding: FragmentRecipeBinding
-    private lateinit var selectedRecipe: SelectedRecipe
+    private val viewModel: RecipeViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        selectedRecipe = args.selectedRecipe
-        binding = FragmentRecipeBinding.inflate(inflater)
-        return binding.root
-    }
+    val recipeId by lazy { navArgs<RecipeFragmentArgs>().value.recipeId }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentRecipeBinding.bind(view)
 
-        ViewUtils.loadGlideImage(binding.recipeImage, selectedRecipe.image)
+        val shimmer = binding.recipeShimmer
+        shimmer.startShimmer()
 
-        viewModel.addToRecentRecipes(selectedRecipe)
-        viewModel.loadRecipeInstructions(selectedRecipe)
-        viewModel.getLikedRecipes(selectedRecipe)
-        viewModel.getDownloadRecipes(selectedRecipe)
+        viewModel.loadRecipeDetails(recipeId)
 
-        setUpRecyclerView()
-        setClickListeners()
-        setUpScrollViewListener()
-        setUpMinorLiveData()
-        handleStateChanges()
+        viewModel.recipeDetails.observe(viewLifecycleOwner) { result ->
+            if (result is Resource.Success && result.data != null) {
+                shimmer.stopShimmer()
+                shimmer.visibility = View.GONE
 
-        binding.toolbarRecipeName.text = selectedRecipe.title ?: "--"
-        binding.recipeName.text = selectedRecipe.title ?: "--"
-        binding.preparationTime.text = "Ready in ${selectedRecipe.readyInMinutes} minutes"
-        binding.servingsAmount.text = "for ${selectedRecipe.servings} servings"
+                binding.recipeLayout.visibility = View.VISIBLE
 
-        viewModel.snackBarMessage.observe(viewLifecycleOwner) {
-            it?.let {
-                ViewUtils.showShortSnackBar(view, it)
-                viewModel.resetSnackBarMessage()
+                setUpNutrition(result.data)
+                loadRecipeDetails(result.data)
+
+
+//                Timber.d("binding.recipeLayout.visibility is VISIBLE is : ${binding.recipeLayout.visibility == View.VISIBLE}")
+            } else if (result is Resource.Error) {
+                showShortSnackBar(result.resMessage)
             }
-        }
-        viewModel.recipeInstructions.observe(viewLifecycleOwner) { recipeInstructions ->
-            Timber.d("recipeInstructions is $recipeInstructions")
 
-            // Since two recipe instructions may exist, opt for the first one
-            recipeInstructions?.firstOrNull()?.steps?.forEach { step ->
-                preparationGroupAdapter.add(PreparationItemGroup(step))
-            }
+            Timber.d("viewModel.recipeDetails is ${viewModel.recipeDetails.value?.data}")
         }
 
-        selectedRecipe.extendedIngredients?.forEach { extendedIngredient ->
-            ingredientsGroupAdapter.add(IngredientItemGroup(extendedIngredient))
-        }
+        setUpBackButton()
+        setUpLikeButton()
+        setUpSaveButton()
+        setUpStepsRecyclerView()
+        setUpIngredientsRecyclerView()
+        setUpSuggestionsRecyclerView()
     }
 
-    private fun handleStateChanges() {
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it ?: return@observe) {
-                State.Empty -> {
-                    hideLoadingBarAndShowError()
-                    binding.errorOccurredImage.setImageResource(R.drawable.filled_heart)
-                    binding.errorOccurredDescription.text = getString(R.string.no_recipe_found)
-                }
-                State.Loading -> {
-                }
-                State.Done -> {
-                    binding.scrollView.visibility = View.VISIBLE
-                    binding.loadingProgressBar.visibility = View.GONE
-                }
-                else -> {
-                    hideLoadingBarAndShowError()
-                }
-            }
-        }
-    }
+//    private fun handleStateChanges() {
+//        viewModel.state.setUpSnackBars(this)
+//
+//        viewModel.state.observe(viewLifecycleOwner) { state ->
+//            Timber.d("State is $state")
+//            when (state) { // Pre-set state is the loading bar showing; so configure for Errors and Done only
+//                State.Done -> showRecipeScreen()
+//                State.ApiError -> showErrorMessage()
+//                State.NoNetworkError -> showErrorMessage()
+//
+//                else -> {}
+//            }
+//        }
+//    }
 
-    private fun hideLoadingBarAndShowError() {
-        binding.errorOccurredImage.visibility = View.VISIBLE
-        binding.errorOccurredDescription.visibility = View.VISIBLE
-        binding.loadingProgressBar.visibility = View.GONE
-    }
+//    private fun showErrorMessage() {
+//        binding.recipeNoNetworkHere.visibility = View.VISIBLE
+//        binding.recipeProgressBar.visibility = View.GONE
+//        binding.recipeLayout.visibility = View.GONE
+//    }
+//
+//    private fun showRecipeScreen() {
+//        binding.recipeNoNetworkHere.visibility = View.GONE
+//        binding.recipeProgressBar.visibility = View.GONE
+//        binding.recipeLayout.visibility = View.VISIBLE
+//    }
 
-    private fun setUpScrollViewListener() {
-        binding.scrollView.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { scrollView, scrollX, scrollY, oldScrollX, oldScrollY ->
-                // If diffY > 0, the user has scrolled down.
-                val diffY = scrollY - oldScrollY
-                val requiredScroll = ResUtils.getPixelsFromSdp(requireContext(), R.dimen._34sdp)
-
-                if (diffY > 0) BottomNavUtils.hideBottomNavView(activity)
-                else if (diffY < 0) BottomNavUtils.showBottomNavView(activity)
-
-                if (scrollY > requiredScroll)
-                    binding.toolbarRecipeName.visibility = View.VISIBLE
-                else
-                    binding.toolbarRecipeName.visibility = View.GONE
-
-                Timber.d("oldScrollY is $oldScrollY, scrollY is $scrollY and diffY is $diffY")
-            }
-        )
-    }
-
-    private fun setClickListeners() {
-        binding.backBtn.setOnClickListener { findNavController().popBackStack() }
-        binding.downloadRecipeBtn.setOnClickListener { viewModel.downloadOrDeleteRecipe(selectedRecipe) }
-        binding.likeBtn.setOnClickListener { viewModel.likeOrDislikeRecipe() }
-    }
-
-    private fun setUpRecyclerView() {
-        binding.ingredientsRecyclerView.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = ingredientsGroupAdapter
-        }
-        binding.preparationRecyclerView.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = preparationGroupAdapter
+    private fun setUpBackButton() {
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
-    private fun setUpMinorLiveData() {
-        viewModel.isLiked.observe(viewLifecycleOwner) {
+    private fun setUpNutrition(recipeDetails: RecipeDetails) {
+        val calories = recipeDetails.toCalories()
+        // The unit is blank since kcal is too large to fit
+        binding.calories.text =
+            buildString { calories.amount?.toInt()?.let { append(it) } ?: append("--") }
+
+        val fat = recipeDetails.toFat()
+        binding.fat.text = buildString {
+            val amount = fat.amount
+            if (amount != null) append(amount)
+            else append("--")
+
+            append(" g")
+        }
+
+        val protein = recipeDetails.toProtein()
+        binding.protein.text = buildString {
+            val amount = protein.amount
+            if (amount != null) append(amount)
+            else append("--")
+
+            append(" g")
+        }
+
+        val carbs = recipeDetails.toCarbs()
+        binding.carbs.text = buildString {
+            val amount = carbs.amount
+            if (amount != null) append(amount)
+            else append("--")
+
+            append(" g")
+        }
+    }
+
+    private fun setUpSaveButton() {
+        viewModel.isSaved.observe(viewLifecycleOwner) { isSaved ->
+            binding.saveBtn.setImageResource(
+                if (isSaved) R.drawable.save_filled else R.drawable.save_border
+            )
+        }
+
+        binding.saveBtn.setOnClickListener {
+            viewModel.saveOrUnSaveRecipe()
+        }
+    }
+
+    private fun setUpLikeButton() {
+        viewModel.isLiked.observe(viewLifecycleOwner) { isLiked ->
             binding.likeBtn.setImageResource(
-                if (it == true) R.drawable.filled_heart else R.drawable.empty_heart
+                if (isLiked) R.drawable.favourite_filled else R.drawable.favourite_outline
             )
+            binding.likeBtn.imageTintList =
+                if (isLiked) ColorStateList.valueOf(Color.parseColor("#FF4033"))
+                else ColorStateList.valueOf(Color.WHITE)
         }
 
-        viewModel.isDownloaded.observe(viewLifecycleOwner) {
-            binding.downloadRecipeBtn.setImageResource(
-                if (it == true) R.drawable.delete_recipe else R.drawable.ic_download
-            )
+        binding.likeBtn.setOnClickListener {
+            viewModel.likeOrUnLikeRecipe()
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.saveRecipeLikeChanges(selectedRecipe)
+    private fun setUpSuggestionsRecyclerView() {
+        val suggestionsAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.suggestionsRecyclerview.adapter = suggestionsAdapter
+
+        viewModel.similarRecipes.observe(viewLifecycleOwner) { result ->
+            if (result is Resource.Success && result.data != null) {
+                val similarRecipes = result.data
+                updateSuggestionsRecyclerView(similarRecipes, suggestionsAdapter)
+            }
+        }
     }
+
+
+    private fun updateSuggestionsRecyclerView(
+        similarRecipes: List<SimilarRecipe>,
+        suggestionsAdapter: GroupAdapter<GroupieViewHolder>
+    ) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val listOfMiniRecipeGroup = similarRecipes.map { similarRecipe ->
+                MiniRecipeGroup(
+                    similarRecipe = similarRecipe,
+                    isSaved = viewModel.isSuggestedRecipeSaved(similarRecipe),
+                    openRecipe = {
+                        findNavController().navigate(
+                            RecipeFragmentDirections
+                                .actionRecipeFragmentSelf(similarRecipe.id)
+                        )
+                    },
+                    saveOrUnsaveRecipe = { viewModel.saveOrUnSaveSuggestedRecipe(similarRecipe) })
+            }
+
+            withContext(Dispatchers.Main) {
+                suggestionsAdapter.update(listOfMiniRecipeGroup)
+            }
+        }
+    }
+
+    private fun setUpIngredientsRecyclerView() {
+        val ingredientsAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.ingredientsRecyclerview.adapter = ingredientsAdapter
+        setUpChangeUnit(ingredientsAdapter)
+
+        viewModel.recipeDetails.observe(viewLifecycleOwner) {
+            updateIngredientsRecyclerView(ingredientsAdapter)
+        }
+    }
+
+    private fun updateIngredientsRecyclerView(ingredientsAdapter: GroupAdapter<GroupieViewHolder>) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val listOfIngredientsGroup =
+                viewModel.recipeDetails.value?.data?.ingredients?.toIngredientGroup()
+
+            withContext(Dispatchers.Main) {
+                ingredientsAdapter.updateAsync(listOfIngredientsGroup ?: return@withContext)
+            }
+        }
+    }
+
+    private suspend fun List<Ingredient>.toIngredientGroup() = withContext(Dispatchers.IO) {
+        map { ingredient ->
+            IngredientGroup(ingredient, viewModel.isUS.value!!) { id ->
+                // TODO: Open ingredient details
+                Timber.d("Open ingredient $id")
+            }
+        }
+    }
+
+    private fun setUpChangeUnit(ingredientsAdapter: GroupAdapter<GroupieViewHolder>) {
+        binding.useUSBtn.setOnClickListener {
+            viewModel.changeUnitSystem(true)
+        }
+        binding.useMetricBtn.setOnClickListener {
+            viewModel.changeUnitSystem(false)
+        }
+
+        viewModel.isUS.observe(viewLifecycleOwner) { isUS ->
+            binding.useUSBtn.backgroundTintList = requireContext().getResColorStateList(
+                if (isUS == null || isUS == true) R.color.grey_blue
+                else R.color.theme_blue
+            )
+            binding.useMetricBtn.backgroundTintList = requireContext().getResColorStateList(
+                if (isUS == null || isUS == true) R.color.theme_blue
+                else R.color.grey_blue
+            )
+
+            updateIngredientsRecyclerView(ingredientsAdapter)
+        }
+    }
+
+    private fun setUpStepsRecyclerView() {
+        val stepsAdapter = GroupAdapter<GroupieViewHolder>()
+        binding.stepsRecyclerview.adapter = stepsAdapter
+
+        viewModel.recipeDetails.observe(viewLifecycleOwner) { recipeDetails ->
+            updateStepsRecyclerView(recipeDetails.data, stepsAdapter)
+        }
+    }
+
+
+    private fun updateStepsRecyclerView(
+        recipeDetails: RecipeDetails?,
+        stepsAdapter: GroupAdapter<GroupieViewHolder>
+    ) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val listOfStepGroup = recipeDetails?.steps?.map {
+                StepGroup(it)
+            }
+
+            withContext(Dispatchers.Main) {
+                stepsAdapter.update(listOfStepGroup ?: return@withContext)
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadRecipeDetails(recipeDetails: RecipeDetails) {
+        Timber.d("loadRecipeDetails called with recipeDetails as $recipeDetails")
+
+        binding.recipeName.text = recipeDetails.toRecipeName()
+
+        binding.recipeImage.loadImage(
+            recipeDetails.recipeImage,
+            R.drawable.loading_food
+        )
+        binding.recipeDescription.text = recipeDetails.toRecipeSummary().fromHtml()
+        binding.recipeRating.rating = recipeDetails.toRecipeRating().toFloat()
+        binding.recipeRatingText.text = "%.1f".format(recipeDetails.toRecipeRating())
+        binding.recipeTime.text = recipeDetails.toRecipeTime()
+        binding.recipeAuthor.text = buildString {
+            append("by ")
+            append(recipeDetails.toRecipeAuthor())
+        }
+    }
+
 }
