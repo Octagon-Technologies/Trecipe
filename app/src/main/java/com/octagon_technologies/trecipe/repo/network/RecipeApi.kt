@@ -3,6 +3,7 @@ package com.octagon_technologies.trecipe.repo.network
 import com.octagon_technologies.trecipe.repo.network.models.complex_search.RemoteComplexSearch
 import com.octagon_technologies.trecipe.repo.network.models.instructions.RecipeInstruction
 import com.octagon_technologies.trecipe.repo.network.models.new_selected_recipe.RemoteSelectedRecipe
+import com.octagon_technologies.trecipe.repo.network.models.nutrition_details.NutritionDetailsResponse
 import com.octagon_technologies.trecipe.repo.network.models.random_recipes.Recipes
 import com.octagon_technologies.trecipe.repo.network.models.similar_recipe.RemoteSimilarRecipe
 import com.octagon_technologies.trecipe.repo.network.models.suggestions.RemoteAutoCompleteSuggestion
@@ -55,4 +56,12 @@ interface RecipeApi {
         @Query("offset") offset: Int,
         @Query("number") number: Int = 10
     ): RemoteComplexSearch
+
+
+    // https://api.spoonacular.com/recipes/1003464/nutritionWidget.json?apiKey=b5e15b5613cd40ae80875252702bc715
+    @GET("recipes/{recipeId}/nutritionWidget.json?apiKey=${Constants.recipe_api_key}")
+    suspend fun getNutritionDetails(
+        @Path("recipeId") recipeId: Int
+    ): NutritionDetailsResponse
+
 }

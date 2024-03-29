@@ -26,12 +26,6 @@ class DiscoverViewModel @Inject constructor(
     val tryRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _tryRecipesResult
 
 
-//    val tryOutPagingData: LiveData<PagingData<DiscoverRecipe>> = Pager(
-//        config = PagingConfig(pageSize = 15, maxSize = 60),
-//        pagingSourceFactory = { TryOutRecipesPagingSource(tryOutRecipesRepo, localRecipeRepo) }
-//    ).liveData
-
-
     init {
         viewModelScope.launch {
             _dailyRecipesResult.value = Resource.Loading()
@@ -47,7 +41,7 @@ class DiscoverViewModel @Inject constructor(
     fun fetchTryOutRecipes() =
         viewModelScope.launch { _tryRecipesResult.value = recipeRepo.getTryOutRecipes() }
 
-    suspend fun isSaved(discoverRecipe: DiscoverRecipe) =
+    fun isSaved(discoverRecipe: DiscoverRecipe) =
         localRecipeRepo.isSaved(discoverRecipe.recipeId)
 
     fun saveOrUnSaveRecipe(discoverRecipe: DiscoverRecipe) =

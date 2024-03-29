@@ -58,7 +58,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.recentSearchRecyclerview.adapter = recentSearchGroupAdapter
 
         viewModel.listOfRecentAutoComplete.observe(viewLifecycleOwner) { listOfRecentAutoComplete ->
-            if (listOfRecentAutoComplete == null) {
+            if (listOfRecentAutoComplete.isNullOrEmpty()) {
                 binding.recentLayout.visibility = View.GONE
             } else {
                 binding.recentLayout.visibility = View.VISIBLE

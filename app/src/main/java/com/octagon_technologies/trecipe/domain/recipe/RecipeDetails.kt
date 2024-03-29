@@ -1,6 +1,7 @@
 package com.octagon_technologies.trecipe.domain.recipe
 
 import android.os.Parcelable
+import com.octagon_technologies.trecipe.domain.recipe.nutrition.Nutrient
 import com.octagon_technologies.trecipe.utils.lowercase
 import com.octagon_technologies.trecipe.utils.toRecipeTime
 import kotlinx.parcelize.Parcelize

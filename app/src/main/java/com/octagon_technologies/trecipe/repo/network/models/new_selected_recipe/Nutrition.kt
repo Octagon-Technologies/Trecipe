@@ -7,7 +7,7 @@ data class Nutrition(
     @Json(name = "caloricBreakdown")
     val caloricBreakdown: CaloricBreakdown,
     @Json(name = "flavonoids")
-    val flavonoids: List<Flavonoid>,
+    val remoteFlavonoids: List<RemoteFlavonoid>,
     @Json(name = "ingredients")
     val ingredients: List<IngredientX>,
     @Json(name = "nutrients")

@@ -3,7 +3,7 @@ package com.octagon_technologies.trecipe.repo.dto
 import com.octagon_technologies.trecipe.domain.discover.DiscoverRecipe
 import com.octagon_technologies.trecipe.domain.recipe.Ingredient
 import com.octagon_technologies.trecipe.domain.recipe.Step
-import com.octagon_technologies.trecipe.domain.recipe.Nutrient
+import com.octagon_technologies.trecipe.domain.recipe.nutrition.Nutrient
 import com.octagon_technologies.trecipe.domain.recipe.RecipeDetails
 import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 import com.octagon_technologies.trecipe.domain.similar_recipe.SimilarRecipe

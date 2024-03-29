@@ -24,7 +24,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LocalRecipeRepo @Inject constructor(
     private val likedRecipeDao: LikedRecipeDao,
     private val recentRecipeDao: RecentRecipeDao,

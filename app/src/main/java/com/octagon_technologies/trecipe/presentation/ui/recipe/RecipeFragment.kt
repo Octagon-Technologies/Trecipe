@@ -62,54 +62,40 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 shimmer.stopShimmer()
                 shimmer.visibility = View.GONE
 
-                binding.recipeLayout.visibility = View.VISIBLE
-
                 setUpNutrition(result.data)
                 loadRecipeDetails(result.data)
 
-
-//                Timber.d("binding.recipeLayout.visibility is VISIBLE is : ${binding.recipeLayout.visibility == View.VISIBLE}")
+                binding.recipeLayout.visibility = View.VISIBLE
             } else if (result is Resource.Error) {
-                showShortSnackBar(result.resMessage)
-            }
+                shimmer.stopShimmer()
+                shimmer.visibility = View.GONE
 
-            Timber.d("viewModel.recipeDetails is ${viewModel.recipeDetails.value?.data}")
+                showShortSnackBar(result.resMessage)
+                binding.errorLayout.visibility = View.VISIBLE
+            }
         }
 
         setUpBackButton()
         setUpLikeButton()
         setUpSaveButton()
+        setUpClickListeners()
         setUpStepsRecyclerView()
         setUpIngredientsRecyclerView()
         setUpSuggestionsRecyclerView()
     }
 
-//    private fun handleStateChanges() {
-//        viewModel.state.setUpSnackBars(this)
-//
-//        viewModel.state.observe(viewLifecycleOwner) { state ->
-//            Timber.d("State is $state")
-//            when (state) { // Pre-set state is the loading bar showing; so configure for Errors and Done only
-//                State.Done -> showRecipeScreen()
-//                State.ApiError -> showErrorMessage()
-//                State.NoNetworkError -> showErrorMessage()
-//
-//                else -> {}
-//            }
-//        }
-//    }
+    private fun setUpClickListeners() {
+        binding.viewNutritionBtn.setOnClickListener {
+            val recipeID = viewModel.recipeDetails.value?.data?.recipeId
+            Timber.d("recipeID in setUpClickListeners() is $recipeID")
 
-//    private fun showErrorMessage() {
-//        binding.recipeNoNetworkHere.visibility = View.VISIBLE
-//        binding.recipeProgressBar.visibility = View.GONE
-//        binding.recipeLayout.visibility = View.GONE
-//    }
-//
-//    private fun showRecipeScreen() {
-//        binding.recipeNoNetworkHere.visibility = View.GONE
-//        binding.recipeProgressBar.visibility = View.GONE
-//        binding.recipeLayout.visibility = View.VISIBLE
-//    }
+            findNavController().navigate(
+                RecipeFragmentDirections.actionRecipeFragmentToNutritionDetailsFragment(
+                    recipeID ?: return@setOnClickListener
+                )
+            )
+        }
+    }
 
     private fun setUpBackButton() {
         binding.backBtn.setOnClickListener {

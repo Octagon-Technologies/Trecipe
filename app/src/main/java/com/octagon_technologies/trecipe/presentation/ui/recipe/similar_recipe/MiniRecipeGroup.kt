@@ -19,7 +19,6 @@ class MiniRecipeGroup(
 ) : BindableItem<MiniRecipeLayoutBinding>() {
     override fun bind(binding: MiniRecipeLayoutBinding, position: Int) {
         // In the Similar recipes for RecipeFragment, we have no image
-        Timber.d("similarRecipe.imagePath is ${similarRecipe.imagePath}")
         binding.miniRecipeImage.loadImage(similarRecipe.imagePath, R.drawable.loading_food)
         binding.miniRecipeName.text = similarRecipe.recipeName
         binding.miniRecipeTime.text = similarRecipe.toRecipeTime()

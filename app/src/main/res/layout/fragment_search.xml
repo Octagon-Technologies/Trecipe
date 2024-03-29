@@ -12,35 +12,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
+        android:contentDescription="@string/back_button"
         android:padding="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back"
         app:tint="?attr/colorOnPrimary" />
 
-    <EditText
-        android:id="@+id/search_input"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_input_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:background="@drawable/search_btn_background"
-        android:drawableStart="@drawable/search_24"
-        android:drawablePadding="@dimen/_6sdp"
-        android:ems="10"
-        android:fontFamily="@font/cabin_medium"
-        android:hint="@string/search_here"
-        android:inputType="textPersonName"
-        android:padding="@dimen/_6sdp"
-        android:paddingStart="@dimen/_6sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:textColor="@color/light_black"
-        android:textColorHint="@color/light_grey"
-        android:textCursorDrawable="@drawable/color_drawable"
+        app:boxCornerRadiusTopStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxBackgroundColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/search_back_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false"
+        android:contextClickable="false"
         app:layout_constraintStart_toEndOf="@+id/search_back_btn"
         app:layout_constraintTop_toTopOf="@+id/search_back_btn"
-        tools:text="chick" />
+        tools:targetApi="m">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:ems="10"
+            android:fontFamily="@font/cabin_medium"
+            android:inputType="textPersonName"
+            android:padding="@dimen/_6sdp"
+            android:paddingStart="@dimen/_14sdp"
+            android:textColorHint="@color/light_grey"
+            android:paddingEnd="@dimen/_12sdp"
+            android:textColor="@color/light_black"
+            app:layout_constraintBottom_toBottomOf="@+id/search_back_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/search_back_btn"
+            app:layout_constraintTop_toTopOf="@+id/search_back_btn"
+            android:hint="@string/search_here"
+            tools:text="chic"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recyclerview"
@@ -91,30 +109,31 @@
         android:id="@+id/recent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_back_btn">
-    <TextView
-        android:id="@+id/plain_recent"
-        style="@style/header_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/recent"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_back_btn"
+        tools:visibility="visible">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recent_search_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plain_recent"
-        tools:listitem="@layout/recent_autocomplete_tab" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/plain_recent"
+            style="@style/header_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/recent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recent_search_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/plain_recent"
+            tools:listitem="@layout/recent_autocomplete_tab" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

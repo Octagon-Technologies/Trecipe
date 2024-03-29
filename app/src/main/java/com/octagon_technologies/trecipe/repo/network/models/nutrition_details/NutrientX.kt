@@ -1,13 +1,15 @@
-package com.octagon_technologies.trecipe.repo.network.models.new_selected_recipe
+package com.octagon_technologies.trecipe.repo.network.models.nutrition_details
 
 
 import com.squareup.moshi.Json
 
-data class Flavonoid(
+data class NutrientX(
     @Json(name = "amount")
     val amount: Double,
     @Json(name = "name")
     val name: String,
+    @Json(name = "percentOfDailyNeeds")
+    val percentOfDailyNeeds: Double,
     @Json(name = "unit")
     val unit: String
 )

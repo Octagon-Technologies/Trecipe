@@ -35,35 +35,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
         setUpDiscoverShimmerAndTab()
         setUpTryOutShimmerAndTab()
-
-//        handleStateChanges()
     }
-
-//    private fun handleStateChanges() {
-//        viewModel.state.setUpSnackBars(this)
-//
-//        viewModel.state.observe(viewLifecycleOwner) { state ->
-//            when (state ?: return@observe) {
-//                State.Loading -> {}
-//
-//                // Show the recyclerview since we have the results
-//                State.Done -> {
-//                    binding.dailyInspirationRecyclerview.visibility = View.VISIBLE
-//                    binding.tryOutRecyclerview.visibility = View.VISIBLE
-//                    binding.dailyProgressBar.visibility = View.GONE
-//                    binding.tryOutProgressBar.visibility = View.GONE
-//                }
-//
-//                // In case of any errors, show the user an error message if we have no data in our DB
-//                else -> {
-//                    if (viewModel.canShowError.value == true) {
-//                        if (state == State.ApiError || state == State.NoNetworkError) showError()
-//                    } else
-//                        showRecyclerViewWithData()
-//                }
-//            }
-//        }
-//    }
 
     /**
      * The shimmer is automatically started { the visibility is already View.VISIBLE from XML }
@@ -180,40 +152,6 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             if (result is Resource.Error)
                 showShortSnackBar(result.resMessage)
         }
-
-//        val adapter = TryOutPagingAdapter(
-//            openRecipe = { recipeId ->
-//                findNavController().navigate(
-//                    DiscoverFragmentDirections
-//                        .actionDiscoverFragmentToRecipeFragment(recipeId)
-//                )
-//            },
-//            saveOrUnsaveRecipe = {  discoverRecipe ->
-//                viewModel.saveOrUnSaveRecipe(discoverRecipe)
-//            }
-//        )
-//
-//        binding.tryOutRecyclerview.adapter = adapter
-//
-//        adapter.addLoadStateListener {  loadStates ->
-//            Timber.d("loadStates.prepend is ${loadStates.prepend}")
-//            Timber.d("loadStates.append is ${loadStates.append}")
-//            Timber.d("loadStates.refresh is ${loadStates.refresh}")
-//        }
-
-//        viewModel.tryOutPagingData.observe(viewLifecycleOwner) { pagingRecipes ->
-//            Timber.d("viewModel.tryRecipesResult is $pagingRecipes")
-//
-//            if (pagingRecipes != null) {
-//                adapter.submitData(lifecycle, pagingRecipes)
-//
-//                if (shimmer.isShimmerVisible) {
-//                    shimmer.stopShimmer()
-//                    shimmer.visibility = View.GONE
-//                }
-//                binding.tryOutRecyclerview.visibility = View.VISIBLE
-//            }
-//        }
     }
 
     private suspend fun transformTryOutRecipes(tryOutRecipes: List<DiscoverRecipe>) =
@@ -235,37 +173,3 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         }
 
 }
-/*
-TODO: Add recyclerview tracking for loading more recipes when it reaches close to the end
-
-        binding.discoverRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-                if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-                    val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition()
-                    val recipesSize = viewModel.listOfRandomRecipe.value?.size ?: return
-                    val diff = recipesSize - lastVisiblePosition
-                    Timber.d("RecyclerView.diff is $diff")
-
-                    if (diff < 5 && !isLoading) {
-                        viewModel.loadData()
-                        isLoading = true
-                    }
-                }
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                Timber.d("dy is $dy in DiscoverFragment")
-
-                // if dy > 0, the user is scrolling down
-                if (dy > 0)
-                    BottomNavUtils.hideBottomNavView(activity)
-                else if (dy < 0)
-                    BottomNavUtils.showBottomNavView(activity)
-            }
-        })
-
- */

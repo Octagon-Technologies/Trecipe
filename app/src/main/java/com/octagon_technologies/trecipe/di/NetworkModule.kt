@@ -1,7 +1,5 @@
 package com.octagon_technologies.trecipe.di
 
-//import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.octagon_technologies.trecipe.repo.database.discover.try_out.TryOutRecipeDao
 import com.octagon_technologies.trecipe.repo.network.RecipeApi
 import com.octagon_technologies.trecipe.utils.Constants
 import com.squareup.moshi.Moshi
@@ -43,6 +41,5 @@ object NetworkModule {
     @Provides
     fun providesRecipeApi(retrofit: Retrofit) =
         retrofit.create<RecipeApi>()
-
 
 }

@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_recipeFragment_self"
             app:destination="@id/recipeFragment" />
+        <action
+            android:id="@+id/action_recipeFragment_to_nutritionDetailsFragment"
+            app:destination="@id/nutritionDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/discoverFragment"
@@ -54,6 +57,15 @@
         <action
             android:id="@+id/action_myRecipesFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nutritionDetailsFragment"
+        android:name="com.octagon_technologies.trecipe.presentation.ui.nutrition_details.NutritionDetailsFragment"
+        android:label="fragment_nutrition_details"
+        tools:layout="@layout/fragment_nutrition_details" >
+        <argument
+            android:name="recipeID"
+            app:argType="integer" />
     </fragment>
 
 </navigation>
