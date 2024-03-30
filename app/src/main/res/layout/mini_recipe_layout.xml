@@ -90,13 +90,13 @@
             android:layout_width="@dimen/_28sdp"
             android:layout_height="@dimen/_28sdp"
             android:layout_margin="@dimen/_4sdp"
-            app:contentPadding="@dimen/_4sdp"
             android:background="@color/transparent_black"
-            app:shapeAppearanceOverlay="@style/CircleImageView"
-            app:srcCompat="@drawable/save_border"
             app:civ_circle_background_color="@color/transparent_black"
+            app:contentPadding="@dimen/_4sdp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:srcCompat="@drawable/save_border" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

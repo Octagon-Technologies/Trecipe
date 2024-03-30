@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/_8sdp"
-    android:paddingBottom="@dimen/_8sdp"
     android:background="@color/grey_blue"
     android:theme="@style/Theme.Trecipe.TransparentBackground">
 
@@ -15,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/allan"
+        android:textSize="@dimen/_13ssp"
         android:textColor="@color/light_white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,8 +24,9 @@
         android:id="@+id/step_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/abeezee"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:fontFamily="@font/cabin"
+        android:textSize="@dimen/_13ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/step_number"

@@ -14,7 +14,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/isolated_egg" />
+        android:src="@drawable/loading_food" />
 
     <TextView
         android:id="@+id/ingredient_amount"

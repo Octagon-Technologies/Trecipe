@@ -45,4 +45,15 @@
     <string name="plain_slash">/</string>
 
     <string name="each_nutrition">%f %s</string>
+    <string name="back_button">Back button</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nutrients">Nutrients</string>
+    <string name="flavonoid_explained">(a group of natural substances with variable phenolic structures)</string>
+    <string name="glycemic_explained">(A measure of the increase in the level of blood glucose caused by eating a specific carbohydrate compared with eating a standard amount of glucose)</string>
+    <string name="flavonoids">Flavonoids</string>
+    <string name="glycemic">Glycemic</string>
+    <string name="amount">Amount</string>
+    <string name="nutrient">Nutrient</string>
+    <string name="daily_guildline">Daily Guildline</string>
 </resources>

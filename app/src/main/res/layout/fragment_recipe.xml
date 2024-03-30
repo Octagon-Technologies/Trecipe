@@ -23,6 +23,43 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
 
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_500sdp"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+
+            <ImageView
+                android:id="@+id/error_occurred_image"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:contentDescription="@string/no_network_available"
+                android:src="@drawable/no_network_available"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.45" />
+
+            <TextView
+                android:id="@+id/error_occurred_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:fontFamily="@font/cabin_medium"
+                android:gravity="center_horizontal"
+                android:text="@string/check_network_connection_error"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/error_occurred_image" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/recipe_layout"
             android:layout_width="match_parent"
@@ -49,19 +86,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/back_btn"
-                    android:layout_width="@dimen/_32sdp"
-                    android:layout_height="@dimen/_32sdp"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:backgroundTint="@color/transparent_black"
-                    app:contentPadding="@dimen/_5sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/CircleImageView"
-                    app:srcCompat="@drawable/arrow_back_24" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/like_btn"
@@ -544,531 +568,18 @@
                 tools:listitem="@layout/mini_recipe_layout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/back_btn"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:backgroundTint="@color/transparent_black"
+            app:contentPadding="@dimen/_5sdp"
+            android:layout_gravity="start|top"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            app:srcCompat="@drawable/arrow_back_24" />
+
 
     </FrameLayout>
-    <!--    <androidx.core.widget.NestedScrollView-->
-    <!--        android:id="@+id/recipe_layout"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:visibility="visible">-->
-
-
-    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--            android:id="@+id/container"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:minHeight="@dimen/_570sdp">-->
-
-    <!--            <ImageView-->
-    <!--                android:id="@+id/recipe_image"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="@dimen/_320sdp"-->
-    <!--                android:importantForAccessibility="no"-->
-    <!--                android:scaleType="centerCrop"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toTopOf="parent"-->
-    <!--                tools:src="@drawable/sample_food" />-->
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:background="@android:color/transparent"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--                <com.google.android.material.imageview.ShapeableImageView-->
-    <!--                    android:id="@+id/back_btn"-->
-    <!--                    android:layout_width="@dimen/_32sdp"-->
-    <!--                    android:layout_height="@dimen/_32sdp"-->
-    <!--                    android:layout_marginStart="@dimen/_8sdp"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:backgroundTint="@color/transparent_black"-->
-    <!--                    app:contentPadding="@dimen/_5sdp"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent"-->
-    <!--                    app:shapeAppearanceOverlay="@style/CircleImageView"-->
-    <!--                    app:srcCompat="@drawable/arrow_back_24" />-->
-
-    <!--                <com.google.android.material.imageview.ShapeableImageView-->
-    <!--                    android:id="@+id/like_btn"-->
-    <!--                    android:layout_width="@dimen/_32sdp"-->
-    <!--                    android:layout_height="@dimen/_32sdp"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:layout_marginEnd="@dimen/_8sdp"-->
-    <!--                    android:backgroundTint="@color/transparent_black"-->
-    <!--                    app:contentPadding="@dimen/_7sdp"-->
-    <!--                    app:layout_constraintEnd_toStartOf="@id/save_btn"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent"-->
-    <!--                    app:shapeAppearanceOverlay="@style/CircleImageView"-->
-    <!--                    app:srcCompat="@drawable/favourite_outline"-->
-    <!--                    app:tint="@android:color/white"/>-->
-
-    <!--                <com.google.android.material.imageview.ShapeableImageView-->
-    <!--                    android:id="@+id/save_btn"-->
-    <!--                    android:layout_width="@dimen/_32sdp"-->
-    <!--                    android:layout_height="@dimen/_32sdp"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:layout_marginEnd="@dimen/_8sdp"-->
-    <!--                    android:backgroundTint="@color/transparent_black"-->
-    <!--                    app:contentPadding="@dimen/_5sdp"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent"-->
-    <!--                    app:shapeAppearanceOverlay="@style/CircleImageView"-->
-    <!--                    app:srcCompat="@drawable/save_border"-->
-    <!--                    app:tint="@android:color/white"-->
-    <!--                    tools:srcCompat="@drawable/save_filled" />-->
-
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--            <com.google.android.material.card.MaterialCardView-->
-    <!--                android:id="@+id/materialCardView"-->
-    <!--                android:layout_width="@dimen/_290sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:minHeight="@dimen/_90sdp"-->
-    <!--                app:cardBackgroundColor="@color/theme_blue"-->
-    <!--                app:cardElevation="4dp"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/recipe_image"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/recipe_image"-->
-    <!--                app:strokeWidth="0dp">-->
-
-    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                    android:layout_width="match_parent"-->
-    <!--                    android:layout_height="match_parent"-->
-    <!--                    android:paddingBottom="@dimen/_12sdp">-->
-
-    <!--                    <TextView-->
-    <!--                        android:id="@+id/plain_recipe"-->
-    <!--                        android:layout_width="wrap_content"-->
-    <!--                        android:layout_height="wrap_content"-->
-    <!--                        android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                        android:fontFamily="@font/alatsi"-->
-    <!--                        android:text="@string/recipe_caps"-->
-    <!--                        android:textColor="@color/light_white"-->
-    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-    <!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                    <TextView-->
-    <!--                        android:id="@+id/recipe_name"-->
-    <!--                        android:layout_width="wrap_content"-->
-    <!--                        android:layout_height="wrap_content"-->
-    <!--                        android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                        android:fontFamily="@font/actor"-->
-    <!--                        android:paddingStart="@dimen/_12sdp"-->
-    <!--                        android:paddingEnd="@dimen/_12sdp"-->
-    <!--                        android:textSize="@dimen/_15ssp"-->
-    <!--                        android:textStyle="bold"-->
-    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-    <!--                        app:layout_constraintTop_toBottomOf="@+id/plain_recipe"-->
-    <!--                        tools:text="Oven Baked Catfish + Cooked Fillet With Mayo" />-->
-
-    <!--                    <TextView-->
-    <!--                        android:id="@+id/recipe_author"-->
-    <!--                        android:layout_width="wrap_content"-->
-    <!--                        android:layout_height="wrap_content"-->
-    <!--                        android:layout_marginTop="@dimen/_6sdp"-->
-    <!--                        android:fontFamily="@font/advent_pro_medium"-->
-    <!--                        android:paddingStart="@dimen/_14sdp"-->
-    <!--                        android:paddingEnd="@dimen/_14sdp"-->
-    <!--                        android:textColor="@color/light_white"-->
-    <!--                        android:textSize="@dimen/_14ssp"-->
-    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-    <!--                        app:layout_constraintTop_toBottomOf="@+id/recipe_name"-->
-    <!--                        tools:text="by Buy This Cook That" />-->
-
-
-    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-    <!--            </com.google.android.material.card.MaterialCardView>-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/recipe_rating_text"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="@dimen/_16sdp"-->
-    <!--                android:layout_marginEnd="@dimen/_2sdp"-->
-    <!--                android:fontFamily="@font/montserrat_alternates_bold"-->
-    <!--                android:textSize="@dimen/_15ssp"-->
-    <!--                app:layout_constraintEnd_toStartOf="@+id/recipe_rating"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/materialCardView"-->
-    <!--                tools:text="4.2" />-->
-
-
-    <!--            <me.zhanghai.android.materialratingbar.MaterialRatingBar-->
-    <!--                android:id="@+id/recipe_rating"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="0dp"-->
-    <!--                android:isIndicator="true"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/recipe_rating_text"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintHorizontal_bias="0.6"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toTopOf="@+id/recipe_rating_text"-->
-    <!--                app:mrb_progressTint="@color/dark_orange"-->
-    <!--                app:mrb_secondaryProgressTint="@color/dark_orange"-->
-    <!--                tools:rating="4" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/recipe_description"-->
-    <!--                android:layout_width="0dp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="@dimen/_16sdp"-->
-    <!--                android:fontFamily="@font/abeezee"-->
-    <!--                android:textFontWeight="300"-->
-    <!--                android:textSize="@dimen/_12ssp"-->
-    <!--                app:layout_constraintEnd_toEndOf="@+id/materialCardView"-->
-    <!--                app:layout_constraintStart_toStartOf="@+id/materialCardView"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/recipe_rating_text"-->
-    <!--                tools:targetApi="p"-->
-    <!--                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus lacus justo, nec pharetra nibh ultrices in. Nunc viverra est non metus suscipit rhoncus. Pellentesque ullamcorper vestibulum ex ut ultricies. Fusce laoreet ullamcorper lobortis. Vivamus ac ex sed enim efficitur porta. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam eu turpis ut nulla tristique varius. Maecenas tincidunt elit vitae arcu condimentum pellentesque.  Quisque sem sem, accumsan sed magna eu, lobortis posuere arcu. Aenean elementum ligula venenatis purus rhoncus scelerisque vitae a ex. Aenean tristique urna odio. Donec dictum metus id condimentum facilisis. Mauris eu dapibus neque, nec suscipit ante. Vestibulum et porttitor sapien, vel pharetra lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos." />-->
-
-    <!--            <com.google.android.material.card.MaterialCardView-->
-    <!--                android:id="@+id/plain_time_card_view"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="@dimen/_80sdp"-->
-    <!--                android:layout_marginStart="@dimen/_8sdp"-->
-    <!--                android:layout_marginTop="@dimen/_18sdp"-->
-    <!--                android:layout_marginEnd="@dimen/_8sdp"-->
-    <!--                app:cardCornerRadius="16dp"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/recipe_description"-->
-    <!--                app:strokeColor="@color/light_white"-->
-    <!--                app:strokeWidth="@dimen/_1sdp">-->
-
-    <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                    android:layout_width="match_parent"-->
-    <!--                    android:layout_height="match_parent">-->
-
-
-    <!--                    <TextView-->
-    <!--                        android:id="@+id/recipe_time"-->
-    <!--                        android:layout_width="wrap_content"-->
-    <!--                        android:layout_height="wrap_content"-->
-    <!--                        android:layout_marginTop="@dimen/_16sdp"-->
-    <!--                        android:fontFamily="@font/abeezee"-->
-    <!--                        android:textSize="@dimen/_14ssp"-->
-    <!--                        android:textStyle="bold"-->
-    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-    <!--                        app:layout_constraintTop_toTopOf="parent"-->
-    <!--                        tools:text="50min" />-->
-
-    <!--                    <TextView-->
-    <!--                        android:id="@+id/plain_total_time"-->
-    <!--                        android:layout_width="wrap_content"-->
-    <!--                        android:layout_height="wrap_content"-->
-    <!--                        android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                        android:fontFamily="@font/allan"-->
-    <!--                        android:text="@string/total_time"-->
-    <!--                        android:textColor="@color/light_white"-->
-    <!--                        android:textSize="@dimen/_15ssp"-->
-    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-    <!--                        app:layout_constraintTop_toBottomOf="@+id/recipe_time" />-->
-    <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--            </com.google.android.material.card.MaterialCardView>-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/plain_ingredients"-->
-    <!--                style="@style/header_1"-->
-    <!--                android:text="@string/ingredients"-->
-    <!--                app:layout_constraintStart_toStartOf="@+id/plain_time_card_view"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/plain_time_card_view" />-->
-
-    <!--            <com.google.android.material.button.MaterialButton-->
-    <!--                android:id="@+id/use_metric_btn"-->
-    <!--                android:layout_width="@dimen/_64sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:padding="@dimen/_8sdp"-->
-    <!--                android:text="@string/metric"-->
-    <!--                app:backgroundTint="@color/theme_blue"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/use_US_btn"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintTop_toTopOf="@+id/use_US_btn" />-->
-
-    <!--            <com.google.android.material.button.MaterialButton-->
-    <!--                android:id="@+id/use_US_btn"-->
-    <!--                android:layout_width="@dimen/_64sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:padding="@dimen/_8sdp"-->
-    <!--                android:text="@string/us"-->
-    <!--                app:backgroundTint="@color/grey_blue"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/plain_ingredients"-->
-    <!--                app:layout_constraintEnd_toStartOf="@id/use_metric_btn"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/plain_ingredients" />-->
-
-    <!--            <androidx.recyclerview.widget.RecyclerView-->
-    <!--                android:id="@+id/ingredients_recyclerview"-->
-    <!--                android:layout_width="0dp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginStart="@dimen/_8sdp"-->
-    <!--                android:layout_marginTop="@dimen/_16sdp"-->
-    <!--                android:layout_marginEnd="@dimen/_8sdp"-->
-    <!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/plain_ingredients"-->
-    <!--                tools:layout_height="@dimen/_100sdp"-->
-    <!--                tools:listitem="@layout/mini_ingredient" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/plain_nutrition_per_serving"-->
-    <!--                style="@style/header_1"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="@dimen/_28sdp"-->
-    <!--                android:text="@string/nutrition_per_serving"-->
-    <!--                app:layout_constraintStart_toStartOf="@+id/ingredients_recyclerview"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/ingredients_recyclerview" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/view_nutrition_btn"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginEnd="@dimen/_8sdp"-->
-    <!--                android:padding="@dimen/_4sdp"-->
-    <!--                android:text="@string/view_all_caps"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/plain_nutrition_per_serving"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent" />-->
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:id="@+id/calorie_tab"-->
-    <!--                android:layout_width="@dimen/_75sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="@dimen/_12sdp"-->
-    <!--                app:layout_constraintStart_toStartOf="@+id/plain_nutrition_per_serving"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/plain_nutrition_per_serving">-->
-
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/plain_calories_tab"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:fontFamily="@font/advent_pro_medium"-->
-    <!--                    android:text="@string/calories_caps"-->
-    <!--                    android:textSize="@dimen/_10ssp"-->
-    <!--                    android:textStyle="bold"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/calories"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:fontFamily="@font/cabin_medium"-->
-    <!--                    android:textSize="@dimen/_12ssp"-->
-    <!--                    app:layout_constraintEnd_toEndOf="@+id/plain_calories_tab"-->
-    <!--                    app:layout_constraintStart_toStartOf="@+id/plain_calories_tab"-->
-    <!--                    app:layout_constraintTop_toBottomOf="@+id/plain_calories_tab"-->
-    <!--                    tools:text="1305" />-->
-
-    <!--                <com.google.android.material.divider.MaterialDivider-->
-    <!--                    android:layout_width="@dimen/_1sdp"-->
-    <!--                    android:layout_height="0dp"-->
-    <!--                    app:dividerColor="@color/grey_blue"-->
-    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:id="@+id/fat_tab"-->
-    <!--                android:layout_width="@dimen/_75sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/calorie_tab"-->
-    <!--                app:layout_constraintStart_toEndOf="@+id/calorie_tab"-->
-    <!--                app:layout_constraintTop_toTopOf="@+id/calorie_tab">-->
-
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/plain_fat"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:fontFamily="@font/advent_pro_medium"-->
-    <!--                    android:text="@string/fat_caps"-->
-    <!--                    android:textSize="@dimen/_10ssp"-->
-    <!--                    android:textStyle="bold"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/fat"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:fontFamily="@font/cabin_medium"-->
-    <!--                    android:textSize="@dimen/_12ssp"-->
-    <!--                    app:layout_constraintEnd_toEndOf="@+id/plain_fat"-->
-    <!--                    app:layout_constraintStart_toStartOf="@+id/plain_fat"-->
-    <!--                    app:layout_constraintTop_toBottomOf="@+id/plain_fat"-->
-    <!--                    tools:text="115 g" />-->
-
-    <!--                <com.google.android.material.divider.MaterialDivider-->
-    <!--                    android:layout_width="@dimen/_1sdp"-->
-    <!--                    android:layout_height="0dp"-->
-    <!--                    app:dividerColor="@color/grey_blue"-->
-    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:id="@+id/protein_tab"-->
-    <!--                android:layout_width="@dimen/_75sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/calorie_tab"-->
-    <!--                app:layout_constraintStart_toEndOf="@+id/fat_tab"-->
-    <!--                app:layout_constraintTop_toTopOf="@+id/calorie_tab">-->
-
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/plain_protein"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:fontFamily="@font/advent_pro_medium"-->
-    <!--                    android:text="@string/protein_caps"-->
-    <!--                    android:textSize="@dimen/_10ssp"-->
-    <!--                    android:textStyle="bold"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/protein"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:fontFamily="@font/cabin_medium"-->
-    <!--                    android:textSize="@dimen/_12ssp"-->
-    <!--                    app:layout_constraintEnd_toEndOf="@+id/plain_protein"-->
-    <!--                    app:layout_constraintStart_toStartOf="@+id/plain_protein"-->
-    <!--                    app:layout_constraintTop_toBottomOf="@+id/plain_protein"-->
-    <!--                    tools:text="25 g" />-->
-
-    <!--                <com.google.android.material.divider.MaterialDivider-->
-    <!--                    android:layout_width="@dimen/_1sdp"-->
-    <!--                    android:layout_height="0dp"-->
-    <!--                    app:dividerColor="@color/grey_blue"-->
-    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:id="@+id/carbs_tab"-->
-    <!--                android:layout_width="@dimen/_75sdp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                app:layout_constraintBottom_toBottomOf="@+id/calorie_tab"-->
-    <!--                app:layout_constraintStart_toEndOf="@+id/protein_tab"-->
-    <!--                app:layout_constraintTop_toTopOf="@+id/calorie_tab">-->
-
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/plain_carbs"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:fontFamily="@font/advent_pro_medium"-->
-    <!--                    android:text="@string/protein_caps"-->
-    <!--                    android:textSize="@dimen/_10ssp"-->
-    <!--                    android:textStyle="bold"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/carbs"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:fontFamily="@font/cabin_medium"-->
-    <!--                    android:textSize="@dimen/_12ssp"-->
-    <!--                    app:layout_constraintEnd_toEndOf="@+id/plain_carbs"-->
-    <!--                    app:layout_constraintStart_toStartOf="@+id/plain_carbs"-->
-    <!--                    app:layout_constraintTop_toBottomOf="@+id/plain_carbs"-->
-    <!--                    tools:text="25 g" />-->
-
-    <!--                <com.google.android.material.divider.MaterialDivider-->
-    <!--                    android:layout_width="@dimen/_1sdp"-->
-    <!--                    android:layout_height="0dp"-->
-    <!--                    app:dividerColor="@color/grey_blue"-->
-    <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--                android:id="@+id/direction_layout"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="@dimen/_28sdp"-->
-    <!--                android:background="@color/grey_blue"-->
-    <!--                android:minHeight="@dimen/_200sdp"-->
-    <!--                android:paddingBottom="@dimen/_8sdp"-->
-    <!--                android:theme="@style/Theme.Trecipe.TransparentBackground"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@id/calorie_tab">-->
-
-    <!--                <TextView-->
-    <!--                    android:id="@+id/plain_directions"-->
-    <!--                    style="@style/header_1"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_marginStart="@dimen/_8sdp"-->
-    <!--                    android:layout_marginTop="@dimen/_12sdp"-->
-    <!--                    android:text="@string/directions"-->
-    <!--                    app:layout_constraintStart_toStartOf="parent"-->
-    <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--                <androidx.recyclerview.widget.RecyclerView-->
-    <!--                    android:id="@+id/steps_recyclerview"-->
-    <!--                    android:layout_width="0dp"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                    android:layout_marginEnd="@dimen/_8sdp"-->
-    <!--                    android:background="@color/grey_blue"-->
-    <!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                    app:layout_constraintStart_toStartOf="@+id/plain_directions"-->
-    <!--                    app:layout_constraintTop_toBottomOf="@+id/plain_directions"-->
-    <!--                    tools:itemCount="4"-->
-    <!--                    tools:listitem="@layout/mini_steps" />-->
-
-    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/plain_you_might_like"-->
-    <!--                style="@style/header_1"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginStart="@dimen/_8sdp"-->
-    <!--                android:text="@string/you_might_also_like"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/direction_layout" />-->
-
-    <!--            <androidx.recyclerview.widget.RecyclerView-->
-    <!--                android:id="@+id/suggestions_recyclerview"-->
-    <!--                android:layout_width="0dp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_marginTop="@dimen/_8sdp"-->
-    <!--                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
-    <!--                app:layout_constraintEnd_toEndOf="parent"-->
-    <!--                app:layout_constraintStart_toStartOf="parent"-->
-    <!--                app:layout_constraintTop_toBottomOf="@+id/plain_you_might_like"-->
-    <!--                app:spanCount="2"-->
-    <!--                tools:itemCount="2"-->
-    <!--                tools:listitem="@layout/mini_recipe_layout" />-->
-    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-    <!--    </androidx.core.widget.NestedScrollView>-->
 </androidx.core.widget.NestedScrollView>

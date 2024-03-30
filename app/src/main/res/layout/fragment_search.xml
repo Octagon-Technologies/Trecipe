@@ -6,41 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.search.SearchFragment">
 
-
-    <ImageView
-        android:id="@+id/search_back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:padding="@dimen/_10sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back"
-        app:tint="?attr/colorOnPrimary" />
-
-    <EditText
-        android:id="@+id/search_input"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_input_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:background="@drawable/search_btn_background"
-        android:drawableStart="@drawable/search_24"
-        android:drawablePadding="@dimen/_6sdp"
-        android:ems="10"
-        android:fontFamily="@font/cabin_medium"
-        android:hint="@string/search_here"
-        android:inputType="textPersonName"
-        android:padding="@dimen/_6sdp"
-        android:paddingStart="@dimen/_6sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:textColor="@color/light_black"
-        android:textColorHint="@color/light_grey"
-        android:textCursorDrawable="@drawable/color_drawable"
+        android:contextClickable="false"
+        app:boxBackgroundColor="@android:color/white"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:hintAnimationEnabled="false"
+        app:hintEnabled="false"
         app:layout_constraintBottom_toBottomOf="@+id/search_back_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/search_back_btn"
         app:layout_constraintTop_toTopOf="@+id/search_back_btn"
-        tools:text="chick" />
+        tools:targetApi="m">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:ems="10"
+            android:fontFamily="@font/cabin_medium"
+            android:hint="@string/search_here"
+            android:inputType="textPersonName"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:padding="@dimen/_6sdp"
+            android:paddingStart="@dimen/_14sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:textColor="@color/light_black"
+            android:textColorHint="@color/light_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/search_back_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/search_back_btn"
+            app:layout_constraintTop_toTopOf="@+id/search_back_btn"
+            tools:text="chic" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recyclerview"
@@ -56,65 +62,88 @@
         tools:listitem="@layout/autocomplete_card"
         tools:visibility="visible" />
 
-    <ImageView
-        android:id="@+id/error_occurred_image"
-        android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_80sdp"
-        android:contentDescription="@string/no_network_available"
-        android:src="@drawable/no_network_available"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/error_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/search_input_layout"
+        tools:visibility="visible">
 
-    <TextView
-        android:id="@+id/error_occurred_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:fontFamily="@font/cabin_medium"
-        android:gravity="center_horizontal"
-        android:text="@string/check_network_connection_error"
-        android:textSize="@dimen/_14ssp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_occurred_image"
-        tools:visibility="gone" />
+        <ImageView
+            android:id="@+id/error_occurred_image"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:contentDescription="@string/no_network_available"
+            android:src="@drawable/no_network_available"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35"
+            />
+
+        <TextView
+            android:id="@+id/error_occurred_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:fontFamily="@font/cabin_medium"
+            android:gravity="center_horizontal"
+            android:text="@string/check_network_connection_error"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/error_occurred_image"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_back_btn">
-    <TextView
-        android:id="@+id/plain_recent"
-        style="@style/header_1"
+        app:layout_constraintTop_toBottomOf="@+id/search_back_btn"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/plain_recent"
+            style="@style/header_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:text="@string/recent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recent_search_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/plain_recent"
+            tools:listitem="@layout/recent_autocomplete_tab" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/search_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:contentDescription="@string/back_button"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/recent"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recent_search_recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plain_recent"
-        tools:listitem="@layout/recent_autocomplete_tab" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:srcCompat="@drawable/ic_arrow_back"
+        app:tint="?attr/colorOnPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,11 @@
         <item name="colorSecondary">@color/grey_blue</item>
         <item name="colorOnSecondary">@android:color/white</item>
 
+        <item name="panelBackground">@null</item>
+        <item name="popupMenuBackground">@null</item>
+        <item name="android:popupMenuStyle">@null</item>
+        <item name="android:contextPopupMenuStyle" tools:targetApi="n">@null</item>
+
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?attr/colorPrimary</item>
@@ -45,7 +50,7 @@
         <item name="android:textColor">@color/bottom_nav_inactive</item>
         <item name="tint">@color/bottom_nav_inactive</item>
         <item name="android:navigationBarColor">@color/theme_blue</item>
-        <item name="selectableItemBackground">@color/theme_blue</item>
+<!--        <item name="selectableItemBackground">@color/theme_blue</item>-->
         <item name="fontFamily">@font/abeezee</item>
     </style>
     

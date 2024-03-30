@@ -1,4 +1,4 @@
-package com.octagon_technologies.trecipe
+package com.octagontechnologies.trecipe
 
 import org.junit.Test
 
