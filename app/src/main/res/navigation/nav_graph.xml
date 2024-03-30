@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.octagon_technologies.trecipe.presentation.ui.search.SearchFragment"
+        android:name="com.octagontechnologies.trecipe.presentation.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchResultsFragment"
-        android:name="com.octagon_technologies.trecipe.presentation.ui.search_results.SearchResultsFragment"
+        android:name="com.octagontechnologies.trecipe.presentation.ui.search_results.SearchResultsFragment"
         android:label="fragment_search_results"
         tools:layout="@layout/fragment_search_results" >
         <argument
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/recipeFragment"
-        android:name="com.octagon_technologies.trecipe.presentation.ui.recipe.RecipeFragment"
+        android:name="com.octagontechnologies.trecipe.presentation.ui.recipe.RecipeFragment"
         android:label="fragment_recipe"
         tools:layout="@layout/fragment_recipe" >
         <argument
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/discoverFragment"
-        android:name="com.octagon_technologies.trecipe.presentation.ui.discover.DiscoverFragment"
+        android:name="com.octagontechnologies.trecipe.presentation.ui.discover.DiscoverFragment"
         android:label="DiscoverFragment" >
         <action
             android:id="@+id/action_discoverFragment_to_recipeFragment"
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/myRecipesFragment"
-        android:name="com.octagon_technologies.trecipe.presentation.ui.my_recipes.MyRecipesFragment"
+        android:name="com.octagontechnologies.trecipe.presentation.ui.my_recipes.MyRecipesFragment"
         android:label="fragment_my_recipes"
         tools:layout="@layout/fragment_my_recipes" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/nutritionDetailsFragment"
-        android:name="com.octagon_technologies.trecipe.presentation.ui.nutrition_details.NutritionDetailsFragment"
+        android:name="com.octagontechnologies.trecipe.presentation.ui.nutrition_details.NutritionDetailsFragment"
         android:label="fragment_nutrition_details"
         tools:layout="@layout/fragment_nutrition_details" >
         <argument

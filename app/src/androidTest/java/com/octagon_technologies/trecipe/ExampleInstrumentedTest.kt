@@ -1,4 +1,4 @@
-package com.octagon_technologies.trecipe
+package com.octagontechnologies.trecipe
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.octagon_technologies.foodie", appContext.packageName)
+        assertEquals("com.octagontechnologies.foodie", appContext.packageName)
     }
 }
