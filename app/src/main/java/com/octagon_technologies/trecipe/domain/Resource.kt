@@ -26,6 +26,10 @@ sealed class Resource<T>(val data: T? = null, private val errorType: ErrorType? 
     class Loading<T>(data: T? = null) : Resource<T>(data)
 }
 
+enum class ErrorType {
+    ApiError, NoNetworkError, Empty
+}
+
 /**
  * Performs the network call and DB operation on the IO thread while catching any possible errors
  */

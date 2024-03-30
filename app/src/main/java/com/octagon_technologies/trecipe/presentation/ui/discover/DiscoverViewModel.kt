@@ -19,10 +19,10 @@ class DiscoverViewModel @Inject constructor(
     private val localRecipeRepo: LocalRecipeRepo
 ) : ViewModel() {
 
-    private val _dailyRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>()
+    private val _dailyRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>(Resource.Loading())
     val dailyRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _dailyRecipesResult
 
-    private val _tryRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>()
+    private val _tryRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>(Resource.Loading())
     val tryRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _tryRecipesResult
 
 

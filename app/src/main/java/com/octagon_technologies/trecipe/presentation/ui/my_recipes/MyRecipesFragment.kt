@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.octagon_technologies.trecipe.R
@@ -53,7 +54,10 @@ class MyRecipesFragment : Fragment(R.layout.fragment_my_recipes) {
 
         override fun createFragment(position: Int): Fragment {
             val openRecipe: (SimpleRecipe) -> Unit = {
-                MyRecipesFragmentDirections.actionMyRecipesFragmentToRecipeFragment(it.recipeId)
+                findNavController().navigate(
+                    MyRecipesFragmentDirections
+                        .actionMyRecipesFragmentToRecipeFragment(it.recipeId)
+                )
             }
             return when (position) {
                 0 -> SavedTabLayout.getInstance(

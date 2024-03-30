@@ -1,4 +1,4 @@
-package com.octagon_technologies.trecipe.repo.network.models.new_selected_recipe
+package com.octagon_technologies.trecipe.repo.network.models.selected_recipe
 
 
 import com.squareup.moshi.Json
@@ -33,7 +33,7 @@ data class RemoteSelectedRecipe(
     @Json(name = "id")
     val id: Int,
     @Json(name = "image")
-    val image: String,
+    val image: String?,
     @Json(name = "imageType")
     val imageType: String?,
     @Json(name = "instructions")

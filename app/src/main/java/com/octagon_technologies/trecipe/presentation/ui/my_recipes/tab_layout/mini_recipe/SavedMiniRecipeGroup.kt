@@ -30,6 +30,8 @@ class SavedMiniRecipeGroup(
         binding.miniRecipeTime.visibility = View.GONE
 
         binding.saveBtn.setOnClickListener { removeFromCategory() }
+
+        binding.root.setOnClickListener { openRecipe() }
     }
 
     override fun getLayout(): Int = R.layout.mini_recipe_layout

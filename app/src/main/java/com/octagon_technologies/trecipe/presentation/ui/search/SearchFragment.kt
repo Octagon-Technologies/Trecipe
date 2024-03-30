@@ -1,7 +1,11 @@
 package com.octagon_technologies.trecipe.presentation.ui.search
 
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -9,11 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentSearchBinding
-import com.octagon_technologies.trecipe.domain.State
+import com.octagon_technologies.trecipe.domain.Resource
 import com.octagon_technologies.trecipe.presentation.ui.search.autocomplete_group.AutoCompleteGroup
 import com.octagon_technologies.trecipe.presentation.ui.search.recent_tab.RecentTabGroup
 import com.octagon_technologies.trecipe.utils.KeyboardUtils
-import com.octagon_technologies.trecipe.utils.ResUtils
+import com.octagon_technologies.trecipe.utils.showShortSnackBar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,15 +28,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
 
-        setUpRecyclerView()
+        setUpLoadState()
+        setUpRecentAutoComplete()
+        setUpAutoCompleteRecyclerView()
         setUpNavigateToResults()
         setUpTextWatcher()
         setUpClickListener()
-        handleStateChanges()
     }
 
     private fun setUpNavigateToResults() {
@@ -48,16 +54,27 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setUpRecyclerView() {
-        setUpRecentAutoComplete()
-        setUpAutoCompleteRecyclerView()
+    private fun setUpLoadState() {
+        viewModel.recipeSuggestions.observe(viewLifecycleOwner) { result ->
+            if (result is Resource.Error) {
+                binding.errorLayout.visibility = View.VISIBLE
+                binding.recentLayout.visibility = View.GONE
+
+                showShortSnackBar(result.resMessage)
+            } else if (result is Resource.Success) {
+                binding.errorLayout.visibility = View.GONE
+                binding.searchRecyclerview.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setUpRecentAutoComplete() {
         val recentSearchGroupAdapter = GroupAdapter<GroupieViewHolder>()
         binding.recentSearchRecyclerview.adapter = recentSearchGroupAdapter
 
-        viewModel.listOfRecentAutoComplete.observe(viewLifecycleOwner) { listOfRecentAutoComplete ->
+        viewModel.listOfRecentAutoComplete.observe(viewLifecycleOwner) { result ->
+            val listOfRecentAutoComplete = result.data
+
             if (listOfRecentAutoComplete.isNullOrEmpty()) {
                 binding.recentLayout.visibility = View.GONE
             } else {
@@ -66,7 +83,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 val listOfRecentTabGroup = listOfRecentAutoComplete.map { autoComplete ->
                     RecentTabGroup(
                         recentAutoComplete = autoComplete,
-                        onRecentTabSelected = { viewModel.addQueryToRecent(autoComplete) }
+                        onRecentTabSelected = {
+                            binding.searchInput.setText(autoComplete.name)
+                            viewModel.addQueryToRecent(autoComplete)
+                        }
                     )
                 }
 
@@ -79,53 +99,24 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val autoCompleteGroupAdapter = GroupAdapter<GroupieViewHolder>()
         binding.searchRecyclerview.adapter = autoCompleteGroupAdapter
 
-        viewModel.recipeSuggestions.observe(viewLifecycleOwner) { recipeSuggestions ->
-            autoCompleteGroupAdapter.clear()
-            Timber.d("recipeSuggestions.size is ${recipeSuggestions.size}")
+        viewModel.recipeSuggestions.observe(viewLifecycleOwner) { result ->
+            val recipeSuggestions = result.data
 
-            val listOfAutoCompleteGroup = recipeSuggestions?.map { autoComplete ->
-                AutoCompleteGroup(autoComplete = autoComplete, onClick = {
+            if (result is Resource.Success && recipeSuggestions != null) {
+                autoCompleteGroupAdapter.clear()
+                Timber.d("recipeSuggestions.size is ${recipeSuggestions.size}")
 
-                    binding.searchInput.setText(autoComplete.name)
-                    viewModel.addQueryToRecent(autoComplete)
-
-                })
-            } ?: return@observe
-
-            Timber.d("listOfAutoCompleteGroup.size is ${listOfAutoCompleteGroup.size}")
-            autoCompleteGroupAdapter.addAll(listOfAutoCompleteGroup)
-        }
-    }
-
-    private fun handleStateChanges() {
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it ?: return@observe) {
-                State.Loading -> {}
-                State.Done -> {
-                    hideErrorImage()
-                    binding.searchRecyclerview.visibility = View.VISIBLE
+                val listOfAutoCompleteGroup = recipeSuggestions.map { autoComplete ->
+                    AutoCompleteGroup(autoComplete = autoComplete, onClick = {
+                        binding.searchInput.setText(autoComplete.name)
+                        viewModel.addQueryToRecent(autoComplete)
+                    })
                 }
 
-                State.Empty -> {
-                    showErrorImage()
-                    binding.errorOccurredImage.setImageResource(R.drawable.inbox_24)
-                    binding.errorOccurredDescription.text =
-                        ResUtils.getResString(context, R.string.no_recipes_found_for_search_query)
-                }
-
-                else -> showErrorImage()
+                Timber.d("listOfAutoCompleteGroup.size is ${listOfAutoCompleteGroup.size}")
+                autoCompleteGroupAdapter.addAll(listOfAutoCompleteGroup)
             }
         }
-    }
-
-    private fun showErrorImage() {
-        binding.errorOccurredImage.visibility = View.VISIBLE
-        binding.errorOccurredDescription.visibility = View.VISIBLE
-    }
-
-    private fun hideErrorImage() {
-        binding.errorOccurredImage.visibility = View.GONE
-        binding.errorOccurredDescription.visibility = View.GONE
     }
 
     private fun setUpClickListener() {
@@ -133,6 +124,48 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setUpTextWatcher() {
+        binding.searchInput.customSelectionActionModeCallback = object : ActionMode.Callback {
+            override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+                menu.clear()
+                return true;
+            }
+
+            override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+                menu.clear();
+                return false;
+            }
+
+            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                return false;
+            }
+
+            override fun onDestroyActionMode(mode: ActionMode) {
+
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.searchInput.customInsertionActionModeCallback = object : ActionMode.Callback {
+                override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    menu?.clear()
+                    return true
+                }
+
+                override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                    menu?.clear()
+                    return false
+                }
+
+                override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                    return false
+                }
+
+                override fun onDestroyActionMode(mode: ActionMode?) {
+
+                }
+            }
+        }
+
         binding.searchInput.addTextChangedListener {
             countDownTimer.cancel()
             countDownTimer.start()

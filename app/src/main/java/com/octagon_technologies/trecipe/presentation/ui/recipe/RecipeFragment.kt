@@ -86,13 +86,12 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
 
     private fun setUpClickListeners() {
         binding.viewNutritionBtn.setOnClickListener {
-            val recipeID = viewModel.recipeDetails.value?.data?.recipeId
+            val recipeID =
+                viewModel.recipeDetails.value?.data?.recipeId ?: return@setOnClickListener
             Timber.d("recipeID in setUpClickListeners() is $recipeID")
 
             findNavController().navigate(
-                RecipeFragmentDirections.actionRecipeFragmentToNutritionDetailsFragment(
-                    recipeID ?: return@setOnClickListener
-                )
+                RecipeFragmentDirections.actionRecipeFragmentToNutritionDetailsFragment(recipeID)
             )
         }
     }
@@ -204,6 +203,7 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
     private fun setUpIngredientsRecyclerView() {
         val ingredientsAdapter = GroupAdapter<GroupieViewHolder>()
         binding.ingredientsRecyclerview.adapter = ingredientsAdapter
+
         setUpChangeUnit(ingredientsAdapter)
 
         viewModel.recipeDetails.observe(viewLifecycleOwner) {
@@ -231,7 +231,17 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
         }
     }
 
+    /**
+     * This former ISUS is used to ensure that we don't update the ingredients recyclerview
+     * twice during the first load
+     *
+     * This is because isUS.observe() and recipeDetails.observe() are called together at
+     * the start
+     * (I HOPE THIS logic made sense... I can't find a better way to explain it :) )
+     */
     private fun setUpChangeUnit(ingredientsAdapter: GroupAdapter<GroupieViewHolder>) {
+        var formerISUS = viewModel.isUS.value
+
         binding.useUSBtn.setOnClickListener {
             viewModel.changeUnitSystem(true)
         }
@@ -249,7 +259,10 @@ class RecipeFragment : Fragment(R.layout.fragment_recipe) {
                 else R.color.grey_blue
             )
 
-            updateIngredientsRecyclerView(ingredientsAdapter)
+            if (formerISUS != isUS) {
+                formerISUS = isUS
+                updateIngredientsRecyclerView(ingredientsAdapter)
+            }
         }
     }
 

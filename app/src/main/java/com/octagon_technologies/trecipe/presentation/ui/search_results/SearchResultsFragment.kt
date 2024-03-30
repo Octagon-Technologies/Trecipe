@@ -5,16 +5,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.octagon_technologies.trecipe.R
 import com.octagon_technologies.trecipe.databinding.FragmentSearchResultsBinding
-import com.octagon_technologies.trecipe.domain.State
+import com.octagon_technologies.trecipe.domain.Resource
 import com.octagon_technologies.trecipe.presentation.ui.search_results.search_result.SearchResultGroup
 import com.octagon_technologies.trecipe.utils.BottomNavUtils
-import com.octagon_technologies.trecipe.utils.ResUtils
-import com.octagon_technologies.trecipe.utils.setUpSnackBars
+import com.octagon_technologies.trecipe.utils.showShortSnackBar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
 
     private val viewModel: SearchResultsViewModel by viewModels()
-    private val query by lazy { navArgs<SearchResultsFragmentArgs>().value.query }
 
     private lateinit var binding: FragmentSearchResultsBinding
 
@@ -32,18 +29,35 @@ class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchResultsBinding.bind(view)
-        binding.searchResultsInput.text = query
-        viewModel.loadComplexSearch(query)
+        binding.searchResultsInput.text = viewModel.query
+        viewModel.loadComplexSearch()
 
         setUpSearchResults()
         setUpClickListeners()
         setUpSearchRecyclerView()
-        handleStateChanges()
+        setUpLoadState()
+    }
+
+    private fun setUpLoadState() {
+        viewModel.listOfSearchResult.observe(viewLifecycleOwner) { result ->
+            if (result is Resource.Success) {
+                binding.loadingProgressBar.visibility = View.GONE
+                binding.errorLayout.visibility = View.GONE
+                binding.searchResultsRecyclerView.visibility = View.VISIBLE
+            } else if (result is Resource.Error) {
+                binding.loadingProgressBar.visibility = View.GONE
+                binding.errorLayout.visibility = View.VISIBLE
+                binding.searchResultsRecyclerView.visibility = View.GONE
+
+                showShortSnackBar(result.resMessage)
+            }
+        }
     }
 
     private fun setUpSearchResults() {
-        viewModel.listOfSearchResult.observe(viewLifecycleOwner) { listOfSearchResult ->
-            val listOfSearchGroup = listOfSearchResult?.map { searchResult ->
+        viewModel.listOfSearchResult.observe(viewLifecycleOwner) { result ->
+            val listOfSearchResult = result.data ?: return@observe
+            val listOfSearchGroup = listOfSearchResult.map { searchResult ->
                 SearchResultGroup(
                     searchResult = searchResult,
                     openRecipe = {
@@ -53,45 +67,10 @@ class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
                         )
                     }
                 )
-            } ?: return@observe
+            }
 
             searchResultsGroupAdapter.addAll(listOfSearchGroup)
         }
-    }
-
-    private fun handleStateChanges() {
-        viewModel.state.setUpSnackBars(this)
-
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it ?: return@observe) {
-                State.Empty -> handleEmptyResults()
-                State.Loading -> {}
-
-                // Show the recyclerview since we have the search results
-                State.Done -> {
-                    binding.searchResultsRecyclerView.visibility = View.VISIBLE
-                    binding.loadingProgressBar.visibility = View.GONE
-                }
-
-                // In case of any errors, show the user
-                State.ApiError -> hideLoadingBarAndShowError()
-                State.NoNetworkError -> hideLoadingBarAndShowError()
-            }
-        }
-    }
-
-    private fun hideLoadingBarAndShowError() {
-        binding.errorOccurredImage.visibility = View.VISIBLE
-        binding.errorOccurredDescription.visibility = View.VISIBLE
-        binding.loadingProgressBar.visibility = View.GONE
-    }
-
-    private fun handleEmptyResults() {
-        hideLoadingBarAndShowError()
-
-        binding.errorOccurredImage.setImageResource(R.drawable.inbox_24)
-        binding.errorOccurredDescription.text =
-            ResUtils.getResString(context, R.string.no_recipes_found_for_search_query)
     }
 
     private fun setUpClickListeners() {
@@ -116,7 +95,7 @@ class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
                     val gridLayoutManager = recyclerView.layoutManager as GridLayoutManager
                     val lastPosition = gridLayoutManager.findLastVisibleItemPosition()
 
-                    viewModel.checkIfShouldReloadMore(query, lastPosition)
+                    viewModel.checkIfShouldReloadMore(lastPosition)
                 }
             }
 

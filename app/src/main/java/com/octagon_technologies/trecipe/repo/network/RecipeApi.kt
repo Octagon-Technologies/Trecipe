@@ -2,7 +2,7 @@ package com.octagon_technologies.trecipe.repo.network
 
 import com.octagon_technologies.trecipe.repo.network.models.complex_search.RemoteComplexSearch
 import com.octagon_technologies.trecipe.repo.network.models.instructions.RecipeInstruction
-import com.octagon_technologies.trecipe.repo.network.models.new_selected_recipe.RemoteSelectedRecipe
+import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.RemoteSelectedRecipe
 import com.octagon_technologies.trecipe.repo.network.models.nutrition_details.NutritionDetailsResponse
 import com.octagon_technologies.trecipe.repo.network.models.random_recipes.Recipes
 import com.octagon_technologies.trecipe.repo.network.models.similar_recipe.RemoteSimilarRecipe
@@ -54,7 +54,7 @@ interface RecipeApi {
     suspend fun getComplexSearch(
         @Query("query") query: String,
         @Query("offset") offset: Int,
-        @Query("number") number: Int = 10
+        @Query("number") number: Int = 14
     ): RemoteComplexSearch
 
 

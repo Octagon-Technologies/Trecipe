@@ -3,8 +3,8 @@
 
     <item
         android:id="@+id/discoverFragment"
-        android:icon="@drawable/home_24"
-        android:title="@string/discover"/>
+        android:icon="@drawable/round_home_24"
+        android:title="@string/discover" />
 
     <item
         android:id="@+id/searchFragment"

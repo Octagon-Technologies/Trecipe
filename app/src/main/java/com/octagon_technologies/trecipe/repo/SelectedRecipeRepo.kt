@@ -1,5 +1,6 @@
 package com.octagon_technologies.trecipe.repo
 
+import com.octagon_technologies.trecipe.domain.ErrorType
 import com.octagon_technologies.trecipe.domain.Resource
 import com.octagon_technologies.trecipe.domain.doOperation
 import com.octagon_technologies.trecipe.repo.dto.toRecipeDetails
@@ -12,10 +13,16 @@ class SelectedRecipeRepo @Inject constructor(
 ) {
 
     suspend fun getSelectedRecipe(recipeId: Int) = doOperation {
-        val recipeDetails = recipeApi.getSelectedRecipe(recipeId).toRecipeDetails()
-        localRecipeRepo.insertRecentRecipe(recipeDetails)
+        try {
+            val recipeDetails = recipeApi.getSelectedRecipe(recipeId).toRecipeDetails()
+            localRecipeRepo.insertRecentRecipe(recipeDetails)
 
-        Resource.Success(recipeDetails)
+            Resource.Success(recipeDetails)
+        }
+        // No steps in the recipe
+        catch(e: NoSuchElementException) {
+            Resource.Error(ErrorType.ApiError)
+        }
     }
 
 }

@@ -53,4 +53,7 @@
     <string name="glycemic_explained">(A measure of the increase in the level of blood glucose caused by eating a specific carbohydrate compared with eating a standard amount of glucose)</string>
     <string name="flavonoids">Flavonoids</string>
     <string name="glycemic">Glycemic</string>
+    <string name="amount">Amount</string>
+    <string name="nutrient">Nutrient</string>
+    <string name="daily_guildline">Daily Guildline</string>
 </resources>

@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class RecipeDetails(
     val recipeId: Int,
     val recipeName: String,
-    val recipeImage: String,
+    val recipeImage: String?,
     val recipeAuthor: String,
     val recipeSummary: String?,
     internal val recipeScore: Double,

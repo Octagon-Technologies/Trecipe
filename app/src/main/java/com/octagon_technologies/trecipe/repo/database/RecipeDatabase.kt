@@ -18,7 +18,7 @@ import com.octagon_technologies.trecipe.repo.database.saved.SavedRecipeEntity
 
 @Database(
     entities = [LikedRecipeEntity::class, RecentRecipeEntity::class, DailyLocalRecipe::class, TryOutRecipe::class, SavedRecipeEntity::class, RecentAutoComplete::class],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(RecipeTypeConverters::class)

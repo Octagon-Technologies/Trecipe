@@ -7,7 +7,7 @@ import com.octagon_technologies.trecipe.domain.recipe.nutrition.Nutrient
 import com.octagon_technologies.trecipe.domain.recipe.RecipeDetails
 import com.octagon_technologies.trecipe.domain.search.SimpleRecipe
 import com.octagon_technologies.trecipe.domain.similar_recipe.SimilarRecipe
-import com.octagon_technologies.trecipe.repo.network.models.new_selected_recipe.RemoteSelectedRecipe
+import com.octagon_technologies.trecipe.repo.network.models.selected_recipe.RemoteSelectedRecipe
 import com.octagon_technologies.trecipe.repo.network.models.random_recipes.RandomRecipe
 import com.octagon_technologies.trecipe.repo.network.models.similar_recipe.RemoteSimilarRecipe
 import com.octagon_technologies.trecipe.utils.capitalize

@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="gone"
-            tools:visibility="visible"
+            tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,38 +83,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/main_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/back_btn"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/plain_nutrition_per_serving"
-            style="@style/header_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:fontFamily="@font/advent_pro_medium"
-            android:text="@string/nutrition_per_serving"
-            android:textSize="@dimen/_20ssp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/plain_nutrition_per_serving"
+                style="@style/header_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:fontFamily="@font/advent_pro_medium"
+                android:text="@string/nutrition_per_serving"
+                android:textSize="@dimen/_20ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/nutrients_recyclerview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/plain_nutrition_per_serving"
-            tools:itemCount="6"
-            tools:listitem="@layout/mini_nutrition_layout" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nutrients_recyclerview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/plain_guideline"
+                tools:itemCount="6"
+                tools:listitem="@layout/mini_nutrition_layout" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/advent_pro_medium"
                 android:text="@string/glycemic_explained"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/plain_glycemic" />
@@ -193,7 +193,7 @@
             android:layout_marginEnd="@dimen/_8sdp"
             android:fontFamily="@font/advent_pro_medium"
             android:text="@string/flavonoid_explained"
-            android:textSize="@dimen/_11ssp"
+            android:textSize="@dimen/_12ssp"
             app:layout_constraintBottom_toBottomOf="@+id/plain_flavonoids"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/plain_flavonoids"
@@ -212,6 +212,44 @@
             app:layout_constraintTop_toBottomOf="@+id/plain_flavonoids"
             tools:itemCount="6"
             tools:listitem="@layout/mini_nutrition_layout" />
+
+            <TextView
+                android:id="@+id/plain_nutrient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nutrient"
+                android:fontFamily="@font/cabin_bold"
+                android:textSize="@dimen/_15ssp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/plain_nutrition_per_serving" />
+
+
+            <TextView
+                android:id="@+id/plain_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amount"
+                android:fontFamily="@font/cabin_bold"
+                android:textSize="@dimen/_15ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/plain_nutrient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/plain_guideline"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/cabin_bold"
+                android:text="@string/daily_guildline"
+                android:textAlignment="center"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/plain_nutrient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/plain_amount" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
 import com.octagon_technologies.trecipe.R
-
 
 fun ImageView.loadImage(imageUrl: String?, @DrawableRes defaultImage: Int) {
     Glide.with(this).apply {
@@ -23,6 +23,7 @@ fun ImageView.loadImage(imageUrl: String?, @DrawableRes defaultImage: Int) {
             .placeholder(defaultImage)
             .centerCrop()
             .transition(DrawableTransitionOptions.withCrossFade())
+//            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .into(this@loadImage)
     }
 }

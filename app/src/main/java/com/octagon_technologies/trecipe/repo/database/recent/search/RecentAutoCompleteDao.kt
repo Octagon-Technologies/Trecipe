@@ -7,7 +7,7 @@ import com.octagon_technologies.trecipe.repo.database.BaseDao
 @Dao
 abstract class RecentAutoCompleteDao: BaseDao<RecentAutoComplete> {
 
-    @Query("SELECT * FROM recentAutoComplete")
+    @Query("SELECT * FROM recentAutoComplete ORDER BY dateAdded DESC")
     abstract suspend fun getListOfRecentAutoComplete(): List<RecentAutoComplete>
 
 }

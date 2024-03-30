@@ -1,4 +1,4 @@
-package com.octagon_technologies.trecipe.repo.network.models.new_selected_recipe
+package com.octagon_technologies.trecipe.repo.network.models.selected_recipe
 
 
 import android.os.Parcelable
