@@ -25,6 +25,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+//        apiKeysFile = project.rootProject.file("api_keys.properties")
     }
 
     buildTypes {

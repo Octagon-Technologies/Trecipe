@@ -34,6 +34,8 @@
             android:fontFamily="@font/cabin_medium"
             android:hint="@string/search_here"
             android:inputType="textPersonName"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
             android:padding="@dimen/_6sdp"
             android:paddingStart="@dimen/_14sdp"
             android:paddingEnd="@dimen/_12sdp"
@@ -68,8 +70,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45">
+        app:layout_constraintTop_toBottomOf="@+id/search_input_layout"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/error_occurred_image"
@@ -77,13 +79,12 @@
             android:layout_height="@dimen/_80sdp"
             android:contentDescription="@string/no_network_available"
             android:src="@drawable/no_network_available"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.45"
-            tools:visibility="visible" />
+            app:layout_constraintVertical_bias="0.35"
+            />
 
         <TextView
             android:id="@+id/error_occurred_description"
@@ -96,11 +97,10 @@
             android:gravity="center_horizontal"
             android:text="@string/check_network_connection_error"
             android:textSize="@dimen/_14ssp"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/error_occurred_image"
-            tools:visibility="visible" />
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

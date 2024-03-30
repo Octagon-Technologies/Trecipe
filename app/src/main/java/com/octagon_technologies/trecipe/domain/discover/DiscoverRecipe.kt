@@ -25,4 +25,4 @@ data class DiscoverRecipe(
 fun DiscoverRecipe?.toRecipeTime(): String =
     this?.readyInMinutes.toRecipeTime()
 
-fun DiscoverRecipe?.toRecipeRating(): Float = (this?.recipeScore?.div(20) ?: 4.2).toFloat()
+fun DiscoverRecipe?.toRecipeRating(): Float = (this?.recipeScore?.div(20)?.coerceAtLeast(3.0) ?: 4.2).toFloat()

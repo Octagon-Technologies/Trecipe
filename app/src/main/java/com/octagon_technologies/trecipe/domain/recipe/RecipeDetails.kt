@@ -35,7 +35,7 @@ fun RecipeDetails?.toRecipeSummary() =
 // Converts the out of 100 score to a rating that can be displayed to the user as well as used to run
 // the rating bar
 fun RecipeDetails?.toRecipeRating(): Double =
-    this?.recipeScore?.div(20) ?: 4.0
+    this?.recipeScore?.div(20)?.coerceAtLeast(3.5) ?: 4.0
 
 fun RecipeDetails?.toRecipeTime(): String = this?.readyInMinutes.toRecipeTime()
 

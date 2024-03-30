@@ -124,6 +124,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setUpTextWatcher() {
+        binding.searchInput.setOnEditorActionListener { v, actionId, event ->
+            KeyboardUtils.hideKeyboard(binding.searchInput)
+            countDownTimer.cancel()
+
+            val query = binding.searchInput.text?.toString()
+            if (!query.isNullOrBlank()) {
+                viewModel.loadSuggestions(query)
+            }
+            true
+        }
+
         binding.searchInput.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
                 menu.clear()
