@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.octagontechnologies.trecipe.domain.Resource
 import com.octagontechnologies.trecipe.domain.search.AutoComplete
+import com.octagontechnologies.trecipe.repo.search.SearchRepo
 import com.octagontechnologies.trecipe.repo.search.SearchRepoImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchRepo: SearchRepoImpl
+    private val searchRepo: SearchRepo
 ) : ViewModel() {
 
     private val _listOfRecentAutoComplete = MutableLiveData<Resource<List<AutoComplete>>>(Resource.Loading())

@@ -27,7 +27,7 @@ interface RecipeApi {
     ): RemoteSelectedRecipe
 
     // https://api.spoonacular.com/recipes/716429/similar?apiKey=fe85a32ea0034f4f8577d9b3a5006011
-    @GET("/recipes/{recipeId}/similar&number=6")
+    @GET("/recipes/{recipeId}/similar?number=6")
     suspend fun getSimilarRecipes(
         @Path("recipeId") recipeId: Int,
         @Query("apiKey") apiKey: String = BuildConfig.RECIPE_API_KEY
@@ -35,7 +35,7 @@ interface RecipeApi {
 
 
     // https://api.spoonacular.com/recipes/autocomplete?apiKey=fe85a32ea0034f4f8577d9b3a5006011&number=10&query=be
-    @GET("recipes/autocomplete&number=10")
+    @GET("recipes/autocomplete?number=10")
     suspend fun getRecipeAutocompleteFromQuery(
         @Query("query") query: String,
         @Query("apiKey") apiKey: String = BuildConfig.RECIPE_API_KEY

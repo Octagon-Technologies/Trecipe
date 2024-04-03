@@ -47,7 +47,7 @@ fun RemoteSimilarRecipe.toSimilarRecipe() =
 fun RemoteSelectedRecipe.toRecipeDetails() =
     with(this) {
         val steps =
-            analyzedInstructions.first().steps.map { Step(it.number, it.step) }
+            analyzedInstructions?.first()?.steps?.map { Step(it.number, it.step) } ?: listOf()
         val listOfNutrition = nutrition.nutrients.map {
             Nutrient(
                 name = it.name,

@@ -7,7 +7,7 @@ data class RemoteSelectedRecipe(
     @Json(name = "aggregateLikes")
     val aggregateLikes: Int?,
     @Json(name = "analyzedInstructions")
-    val analyzedInstructions: List<AnalyzedInstruction>,
+    val analyzedInstructions: List<AnalyzedInstruction>?,
     @Json(name = "cheap")
     val cheap: Boolean?,
     @Json(name = "cookingMinutes")

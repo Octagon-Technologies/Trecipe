@@ -4,5 +4,11 @@ package com.octagontechnologies.trecipe.domain.search
 data class SimpleRecipe(
     val recipeId: Int,
     val recipeName: String,
-    val recipeImage: String?
+    val recipeImage: String?,
+
+//
+//    /**
+//     * Small trick for the Search Results Fragment
+//     */
+//    var isSaved: Boolean = false
 )

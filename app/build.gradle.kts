@@ -148,7 +148,7 @@ dependencies {
     implementation("me.zhanghai.android.materialratingbar:library:1.4.0")
 
     // Okhttp Logging Interceptor
-//    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.50")

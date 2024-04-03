@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.octagontechnologies.trecipe.R
 import com.octagontechnologies.trecipe.databinding.FragmentSearchResultsBinding
 import com.octagontechnologies.trecipe.domain.Resource
+import com.octagontechnologies.trecipe.domain.search.SimpleRecipe
 import com.octagontechnologies.trecipe.presentation.ui.search_results.search_result.SearchResultGroup
 import com.octagontechnologies.trecipe.utils.BottomNavUtils
 import com.octagontechnologies.trecipe.utils.showShortSnackBar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
@@ -32,7 +34,6 @@ class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
         binding.searchResultsInput.text = viewModel.query
         viewModel.loadComplexSearch()
 
-        setUpSearchResults()
         setUpClickListeners()
         setUpSearchRecyclerView()
         setUpLoadState()
@@ -54,24 +55,19 @@ class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
         }
     }
 
-    private fun setUpSearchResults() {
-        viewModel.listOfSearchResult.observe(viewLifecycleOwner) { result ->
-            val listOfSearchResult = result.data ?: return@observe
-            val listOfSearchGroup = listOfSearchResult.map { searchResult ->
-                SearchResultGroup(
-                    searchResult = searchResult,
-                    openRecipe = {
-                        findNavController().navigate(
-                            SearchResultsFragmentDirections
-                                .actionSearchResultsFragmentToRecipeFragment(searchResult.recipeId)
-                        )
-                    }
-                )
-            }
 
-            searchResultsGroupAdapter.addAll(listOfSearchGroup)
-        }
-    }
+    private fun SimpleRecipe.transformSimpleRecipeToSearchGroup() =
+        SearchResultGroup(
+            searchResult = this,
+            openRecipe = {
+                findNavController().navigate(
+                    SearchResultsFragmentDirections
+                        .actionSearchResultsFragmentToRecipeFragment(recipeId)
+                )
+            },
+            isSaved = viewModel.savedRecipes.value?.contains(this) == true,
+            saveOrUnsaveRecipe = { viewModel.saveOrUnsaveRecipe(this) }
+        )
 
     private fun setUpClickListeners() {
         binding.searchResultsBackBtn.setOnClickListener {
@@ -83,6 +79,30 @@ class SearchResultsFragment : Fragment(R.layout.fragment_search_results) {
     private fun setUpSearchRecyclerView() {
         binding.searchResultsRecyclerView.adapter = searchResultsGroupAdapter
         setUpSearchRecyclerViewScrollListener()
+
+        viewModel.listOfSearchResult.observe(viewLifecycleOwner) { result ->
+            val listOfSearchResult = result.data ?: return@observe
+            val listOfSearchGroup = listOfSearchResult.map { searchResult ->
+                searchResult.transformSimpleRecipeToSearchGroup()
+            }
+
+            Timber.d("listOfSearchGroup.size is ${listOfSearchGroup.size}")
+            searchResultsGroupAdapter.addAll(listOfSearchGroup)
+
+            Timber.d("searchResultsGroupAdapter.itemCount is ${searchResultsGroupAdapter.itemCount}")
+        }
+
+//        viewModel.savedRecipes.observe(viewLifecycleOwner) { savedRecipes ->
+//            val updatedSearchGroup = savedRecipes?.map {
+//                it.transformSimpleRecipeToSearchGroup()
+//            }
+//            Timber.d("updatedSearchGroup.size is ${updatedSearchGroup?.size}")
+//
+//            if (updatedSearchGroup.isNullOrEmpty()) {
+//                searchResultsGroupAdapter
+//            }
+//            searchResultsGroupAdapter.update(updatedSearchGroup)
+//        }
     }
 
     private fun setUpSearchRecyclerViewScrollListener() {

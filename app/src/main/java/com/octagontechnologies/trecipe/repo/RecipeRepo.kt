@@ -87,6 +87,8 @@ class RecipeRepo @Inject constructor(
 
 
     suspend fun getSimilarRecipes(initialRecipeId: Int) = doOperation {
-        Resource.Success(recipeApi.getSimilarRecipes(initialRecipeId).map { it.toSimilarRecipe() })
+        val similarRecipes = recipeApi.getSimilarRecipes(initialRecipeId).map { it.toSimilarRecipe() }
+        Timber.d("similarRecipes in getSimilarRecipes() is $similarRecipes")
+        Resource.Success(similarRecipes)
     }
 }

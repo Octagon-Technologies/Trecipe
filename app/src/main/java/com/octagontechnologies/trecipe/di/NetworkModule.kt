@@ -1,7 +1,10 @@
 package com.octagontechnologies.trecipe.di
 
+import com.octagontechnologies.trecipe.repo.database.recent.search.RecentAutoCompleteDao
 import com.octagontechnologies.trecipe.repo.network.RECIPE_BASE_URL
 import com.octagontechnologies.trecipe.repo.network.RecipeApi
+import com.octagontechnologies.trecipe.repo.search.SearchRepo
+import com.octagontechnologies.trecipe.repo.search.SearchRepoImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -9,6 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -25,7 +29,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesOkHttpClient() = OkHttpClient.Builder()
-//        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
         .build()
 
     @Provides
@@ -40,5 +44,12 @@ object NetworkModule {
     @Provides
     fun providesRecipeApi(retrofit: Retrofit) =
         retrofit.create<RecipeApi>()
+
+    @Provides
+    fun providesSearchRepo(
+        recentAutoCompleteDao: RecentAutoCompleteDao,
+        recipeApi: RecipeApi
+    ): SearchRepo =
+        SearchRepoImpl(recentAutoCompleteDao, recipeApi)
 
 }
