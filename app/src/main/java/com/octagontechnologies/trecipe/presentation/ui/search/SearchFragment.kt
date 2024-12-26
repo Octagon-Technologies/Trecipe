@@ -124,7 +124,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setUpTextWatcher() {
-        binding.searchInput.setOnEditorActionListener { v, actionId, event ->
+        binding.searchInput.setOnEditorActionListener { _, _, _ ->
             KeyboardUtils.hideKeyboard(binding.searchInput)
             countDownTimer.cancel()
 

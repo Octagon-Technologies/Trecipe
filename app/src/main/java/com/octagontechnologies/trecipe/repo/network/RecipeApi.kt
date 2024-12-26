@@ -26,11 +26,11 @@ interface RecipeApi {
         @Query("apiKey") apiKey: String = BuildConfig.RECIPE_API_KEY
     ): RemoteSelectedRecipe
 
-    // https://api.spoonacular.com/recipes/716429/similar?apiKey=fe85a32ea0034f4f8577d9b3a5006011
+    // https://api.spoonacular.com/recipes/716429/similar?apiKey=fe85a32ea0034f4f8577d9b3a5006011&number=6
     @GET("/recipes/{recipeId}/similar?number=6")
     suspend fun getSimilarRecipes(
         @Path("recipeId") recipeId: Int,
-        @Query("apiKey") apiKey: String = BuildConfig.RECIPE_API_KEY
+        @Query("apiKey") apiKey: String = BuildConfig.RECIPE_API_KEY,
     ): List<RemoteSimilarRecipe>
 
 

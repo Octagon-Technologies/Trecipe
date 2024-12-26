@@ -1,6 +1,7 @@
 package com.octagontechnologies.trecipe.domain.recipe
 
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -14,6 +15,7 @@ data class Ingredient(
     val usUnit: String
 ) : Parcelable {
 
+    @IgnoredOnParcel
     val ingredientImage = ingredientPath?.let { "https://spoonacular.com/cdn/ingredients_100x100/$ingredientPath" }
     fun toFormattedAmount(isUS: Boolean) =
         if (isUS) "$usAmount $usUnit"

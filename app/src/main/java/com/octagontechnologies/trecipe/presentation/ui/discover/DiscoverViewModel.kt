@@ -3,6 +3,7 @@ package com.octagontechnologies.trecipe.presentation.ui.discover
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.octagontechnologies.trecipe.domain.Resource
 import com.octagontechnologies.trecipe.domain.discover.DiscoverRecipe
@@ -10,6 +11,7 @@ import com.octagontechnologies.trecipe.repo.LocalRecipeRepo
 import com.octagontechnologies.trecipe.repo.RecipeRepo
 import com.octagontechnologies.trecipe.repo.dto.toSimpleRecipe
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,17 +21,17 @@ class DiscoverViewModel @Inject constructor(
     private val localRecipeRepo: LocalRecipeRepo
 ) : ViewModel() {
 
-    private val _dailyRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>(Resource.Loading())
-    val dailyRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _dailyRecipesResult
+    private val _dailyRecipesResult = MutableStateFlow<Resource<List<DiscoverRecipe>>>(Resource.Loading())
+    val dailyRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _dailyRecipesResult.asLiveData(viewModelScope.coroutineContext)
 
-    private val _tryRecipesResult = MutableLiveData<Resource<List<DiscoverRecipe>>>(Resource.Loading())
-    val tryRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _tryRecipesResult
+    private val _tryRecipesResult = MutableStateFlow<Resource<List<DiscoverRecipe>>>(Resource.Loading())
+    val tryRecipesResult: LiveData<Resource<List<DiscoverRecipe>>> = _tryRecipesResult.asLiveData(viewModelScope.coroutineContext)
 
 
     init {
         viewModelScope.launch {
-            _dailyRecipesResult.value = Resource.Loading()
-            _tryRecipesResult.value = Resource.Loading()
+//            _dailyRecipesResult.value = Resource.Loading()
+//            _tryRecipesResult.value = Resource.Loading()
 
             fetchDailyRecipes()
             fetchTryOutRecipes()

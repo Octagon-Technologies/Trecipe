@@ -105,7 +105,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
         var isLoading = false
 
-        binding.root.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+        binding.root.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
             val nestedScrollView = checkNotNull(v) {
                 return@setOnScrollChangeListener
             }
